@@ -6,7 +6,9 @@ import {
   LoginRequest,
   RegisterRequest,
   AuthResponse,
+  Country,
 } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Check if user is already logged in from localStorage
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
@@ -106,5 +108,16 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  loadCountries(fields:string[]): Observable<Country[]> {
+    // Example of fields to fetch: ['name', 'region', 'translations', 'flags', 'alpha2Code']
+    if (!fields || fields.length === 0) {
+      return throwError(() => new Error('Fields parameter is required'));
+    }
+    // Construct the URL with the specified fields
+    const fieldsParam = fields.join(',');
+    // Fetch countries from an external API
+    return this.http.get<Country[]>(`https://restcountries.com/v3.1/all?fields=${fieldsParam}`);
   }
 }
