@@ -4,6 +4,7 @@ export interface User {
   username?: string;
   firstName?: string;
   lastName?: string;
+  password?: string; // For local storage validation
   createdAt?: Date;
   updatedAt?: Date;
 }
