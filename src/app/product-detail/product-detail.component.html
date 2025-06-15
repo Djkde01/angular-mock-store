@@ -11,13 +11,8 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            <span class="font-medium">Back to Products</span>
+            <span class="font-medium">Volver a Productos</span>
           </button>
-        </div>
-        <div class="flex items-center">
-          <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Product Details
-          </h1>
         </div>
       </div>
     </div>
@@ -87,7 +82,7 @@
               </ng-container>
             </div>
             <span class="ml-2 text-sm text-gray-600">
-              {{ product.rating.rate }}/5 ({{ product.rating.count }} reviews)
+              {{ product.rating.rate }}/5 ({{ product.rating.count }} opiniones)
             </span>
           </div>
 
@@ -100,45 +95,30 @@
 
           <!-- Description -->
           <div class="mb-8">
-            <h3 class="text-lg font-medium text-gray-900 mb-3">Description</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-3">Descripción</h3>
             <p class="text-gray-600 leading-relaxed">
               {{ product.description }}
             </p>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="flex space-x-4">
-            <button class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg">
-              <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13v6a2 2 0 002 2h6a2 2 0 002-2v-6m-8 0V9a2 2 0 012-2h4a2 2 0 012 2v4M9 9h6"></path>
-              </svg>
-              Add to Cart
-            </button>
-            <button class="flex-shrink-0 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition-colors duration-200">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-              </svg>
-            </button>
-          </div>
-
           <!-- Product Features -->
           <div class="mt-8 pt-8 border-t border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Product Details</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Detalles del Producto</h3>
             <div class="grid grid-cols-1 gap-4">
               <div class="flex justify-between">
-                <span class="text-gray-600">Category:</span>
+                <span class="text-gray-600">Categoría:</span>
                 <span class="font-medium text-gray-900 capitalize">{{ product.category }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Product ID:</span>
+                <span class="text-gray-600">ID del Producto:</span>
                 <span class="font-medium text-gray-900">#{{ product.id }}</span>
               </div>
               <div *ngIf="product.rating" class="flex justify-between">
-                <span class="text-gray-600">Rating:</span>
+                <span class="text-gray-600">Calificación:</span>
                 <span class="font-medium text-gray-900">{{ product.rating.rate }}/5</span>
               </div>
               <div *ngIf="product.rating" class="flex justify-between">
-                <span class="text-gray-600">Reviews:</span>
+                <span class="text-gray-600">Opiniones:</span>
                 <span class="font-medium text-gray-900">{{ product.rating.count }}</span>
               </div>
             </div>

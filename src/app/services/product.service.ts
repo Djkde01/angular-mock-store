@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Product } from '../models/product.model';
+import { AuthService } from '../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,32 @@ export class ProductService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  /**
+   * Get HTTP headers with authorization token if available
+   */
+  private getHttpHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return headers;
+  }
 
   /**
    * Get all products from the API
    */
   getProducts(): Observable<Product[]> {
     this.loadingSubject.next(true);
-    return this.http.get<Product[]>(this.apiUrl).pipe(
+    const headers = this.getHttpHeaders();
+
+    return this.http.get<Product[]>(this.apiUrl, { headers }).pipe(
       map(products => {
         this.productsSubject.next(products);
         this.loadingSubject.next(false);
@@ -40,7 +59,9 @@ export class ProductService {
    * Get a single product by ID
    */
   getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
+    const headers = this.getHttpHeaders();
+
+    return this.http.get<Product>(`${this.apiUrl}/${id}`, { headers }).pipe(
       catchError(error => {
         console.error('Error fetching product:', error);
         return throwError(() => new Error('Failed to load product'));
@@ -52,7 +73,9 @@ export class ProductService {
    * Get all categories
    */
   getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/categories`).pipe(
+    const headers = this.getHttpHeaders();
+
+    return this.http.get<string[]>(`${this.apiUrl}/categories`, { headers }).pipe(
       catchError(error => {
         console.error('Error fetching categories:', error);
         return throwError(() => new Error('Failed to load categories'));
@@ -65,7 +88,9 @@ export class ProductService {
    */
   getProductsByCategory(category: string): Observable<Product[]> {
     this.loadingSubject.next(true);
-    return this.http.get<Product[]>(`${this.apiUrl}/category/${category}`).pipe(
+    const headers = this.getHttpHeaders();
+
+    return this.http.get<Product[]>(`${this.apiUrl}/category/${category}`, { headers }).pipe(
       map(products => {
         this.loadingSubject.next(false);
         return products;
