@@ -29,26 +29,6 @@ export interface UserInfo {
           <div class="flex items-center">
             <!-- Logo -->
             <div class="flex items-center space-x-3">
-              <div
-                class="h-8 w-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center"
-                *ngIf="!logoUrl"
-              >
-                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  />
-                </svg>
-              </div>
-
-              <img
-                *ngIf="logoUrl"
-                [src]="logoUrl"
-                [alt]="title + ' logo'"
-                class="h-8 w-auto"
-              >
 
               <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 {{ title }}
@@ -112,20 +92,6 @@ export interface UserInfo {
             <div *ngIf="userInfo" class="flex items-center space-x-3">
               <!-- User avatar and name -->
               <div class="flex items-center space-x-2">
-                <img
-                  *ngIf="userInfo.avatar"
-                  [src]="userInfo.avatar"
-                  [alt]="userInfo.name"
-                  class="h-8 w-8 rounded-full object-cover"
-                >
-                <div
-                  *ngIf="!userInfo.avatar"
-                  class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center"
-                >
-                  <span class="text-sm font-medium text-indigo-600">
-                    {{ getUserInitials(userInfo.name) }}
-                  </span>
-                </div>
                 <span class="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
                   Bienvenido, <span class="font-medium text-gray-900">{{ userInfo.name }}</span>!
                 </span>
@@ -264,13 +230,5 @@ export class NavigationComponent {
   executeActionAndCloseMobileMenu(action: () => void): void {
     action();
     this.closeMobileMenu();
-  }
-
-  getUserInitials(name: string): string {
-    return name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .slice(0, 2)
-      .join('');
   }
 }
