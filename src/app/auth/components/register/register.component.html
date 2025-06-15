@@ -43,7 +43,7 @@
               [class.focus:border-red-500]="fullName?.invalid && fullName?.touched"
               placeholder="Ingresa tu nombre completo"
             />
-            <div *ngIf="fullName?.invalid && fullName?.touched" class="mt-2">
+            <div *ngIf="fullName?.invalid && (fullName?.touched || fullName?.dirty)" class="mt-2">
               <p *ngIf="fullName?.errors?.['required']" class="text-sm text-red-600 flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -68,12 +68,12 @@
             type="email"
             formControlName="email"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="email?.invalid && email?.touched"
-            [class.focus:ring-red-500]="email?.invalid && email?.touched"
-            [class.focus:border-red-500]="email?.invalid && email?.touched"
+            [class.border-red-300]="email?.invalid && (email?.touched || email?.dirty)"
+            [class.focus:ring-red-500]="email?.invalid && (email?.touched || email?.dirty)"
+            [class.focus:border-red-500]="email?.invalid && (email?.touched || email?.dirty)"
             placeholder="Ingresa tu dirección de correo electrónico"
           />
-          <div *ngIf="email?.invalid && email?.touched" class="mt-2">
+          <div *ngIf="email?.invalid && (email?.touched || email?.dirty)" class="mt-2">
             <p *ngIf="email?.errors?.['required']" class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -98,12 +98,12 @@
             type="password"
             formControlName="password"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="password?.invalid && password?.touched"
-            [class.focus:ring-red-500]="password?.invalid && password?.touched"
-            [class.focus:border-red-500]="password?.invalid && password?.touched"
+            [class.border-red-300]="password?.invalid && (password?.touched || password?.dirty)"
+            [class.focus:ring-red-500]="password?.invalid && (password?.touched || password?.dirty)"
+            [class.focus:border-red-500]="password?.invalid && (password?.touched || password?.dirty)"
             placeholder="Crea una contraseña segura"
           />
-          <div *ngIf="password?.invalid && password?.touched" class="mt-2 space-y-1">
+          <div *ngIf="password?.invalid && (password?.touched || password?.dirty)" class="mt-2 space-y-1">
             <p *ngIf="password?.errors?.['required']" class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -134,12 +134,12 @@
             type="password"
             formControlName="confirmPassword"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
-            [class.focus:ring-red-500]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
-            [class.focus:border-red-500]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+            [class.border-red-300]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+            [class.focus:ring-red-500]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+            [class.focus:border-red-500]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
             placeholder="Confirma tu contraseña"
           />
-          <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="mt-2">
+          <div *ngIf="confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)" class="mt-2">
             <p *ngIf="confirmPassword?.errors?.['required']" class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -147,7 +147,7 @@
               Por favor confirma tu contraseña
             </p>
           </div>
-          <div *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched" class="mt-2">
+          <div *ngIf="registerForm.errors?.['passwordMismatch'] && (confirmPassword?.touched || confirmPassword?.dirty)" class="mt-2">
             <p class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -166,12 +166,12 @@
             type="date"
             formControlName="dateOfBirth"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="dateOfBirth?.invalid && dateOfBirth?.touched"
-            [class.focus:ring-red-500]="dateOfBirth?.invalid && dateOfBirth?.touched"
-            [class.focus:border-red-500]="dateOfBirth?.invalid && dateOfBirth?.touched"
+            [class.border-red-300]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
+            [class.focus:ring-red-500]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
+            [class.focus:border-red-500]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
             placeholder="Selecciona tu fecha de nacimiento"
           />
-          <div *ngIf="dateOfBirth?.invalid && dateOfBirth?.touched" class="mt-2">
+          <div *ngIf="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)" class="mt-2">
             <p *ngIf="dateOfBirth?.errors?.['required']" class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -179,7 +179,7 @@
               La fecha de nacimiento es obligatoria
             </p>
           </div>
-          <div *ngIf="dateOfBirth?.errors?.['minimumAge'] && dateOfBirth?.touched" class="mt-2">
+          <div *ngIf="dateOfBirth?.errors?.['minimumAge'] && (dateOfBirth?.touched || dateOfBirth?.dirty)" class="mt-2">
             <p class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -214,7 +214,7 @@
               </div>
             </label>
           </div>
-          <div *ngIf="genre?.invalid && genre?.touched" class="mt-2">
+          <div *ngIf="genre?.invalid && (genre?.touched || genre?.dirty)" class="mt-2">
             <p class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -232,9 +232,9 @@
             name="residenceCountry"
             formControlName="residenceCountry"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="residenceCountry?.invalid && residenceCountry?.touched"
-            [class.focus:ring-red-500]="residenceCountry?.invalid && residenceCountry?.touched"
-            [class.focus:border-red-500]="residenceCountry?.invalid && residenceCountry?.touched"
+            [class.border-red-300]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
+            [class.focus:ring-red-500]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
+            [class.focus:border-red-500]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
           >
             <option value="" disabled selected>Selecciona tu país</option>
             <optgroup label="Americas">
@@ -244,7 +244,7 @@
               <option *ngFor="let country of otherCountries" [value]="country.translations">{{country.flag}} {{ country.translations.spa.common }}</option>
             </optgroup>
           </select>
-          <div *ngIf="residenceCountry?.invalid && residenceCountry?.touched" class="mt-2">
+          <div *ngIf="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)" class="mt-2">
             <p *ngIf="residenceCountry?.errors?.['required']" class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -274,7 +274,7 @@
               </label>
             </ng-container>
           </div>
-          <div *ngIf="interests?.invalid && interests?.touched" class="mt-2">
+          <div *ngIf="interests?.invalid && (interests?.touched || interests?.dirty)" class="mt-2">
             <p class="text-sm text-red-600 flex items-center">
               <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -284,6 +284,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="bg-green-50 border-l-4 border-green-400 text-green-700 px-4 py-3 rounded-r-md flex items-center animate-pulse">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+        {{ successMessage }}
+      </div>
+
       <!-- Error Message -->
       <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-400 text-red-700 px-4 py-3 rounded-r-md flex items-center animate-pulse">
         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">

@@ -24,6 +24,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   errorMessage = '';
+  successMessage = '';
   countries: Country[] = [];
   americasCountries: Country[] = [];
   otherCountries: Country[] = [];
@@ -91,7 +92,7 @@ export class RegisterComponent implements OnInit {
       },
       error: (error) => {
         this.loadingCountries = false;
-        this.errorMessage = 'Error loading countries. Please try again later.';
+        this.errorMessage = 'No se pudieron cargar los países. Por favor, inténtelo de nuevo más tarde.';
         console.error('Error loading countries:', error);
       }
     });
@@ -243,6 +244,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       this.loading = true;
       this.errorMessage = '';
+      this.successMessage = '';
 
       const fullName = this.registerForm.value.fullName;
       const username = this.generateUsername(fullName);
@@ -260,12 +262,19 @@ export class RegisterComponent implements OnInit {
         next: (response) => {
           this.loading = false;
           console.log('Registration successful:', response);
-          this.router.navigate(['/dashboard']);
+
+          // Show success message
+          this.successMessage = response.message;
+
+          // Redirect to login after a short delay
+          setTimeout(() => {
+            this.router.navigate(['/auth/login']);
+          }, 2000);
         },
         error: (error) => {
           this.loading = false;
           this.errorMessage =
-            error.message || 'Registration failed. Please try again.';
+            error.message || 'Fallo al crear la cuenta. Por favor, inténtelo de nuevo.';
           console.error('Registration error:', error);
         },
       });
