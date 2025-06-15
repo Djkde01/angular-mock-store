@@ -9,11 +9,12 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/user.model';
+import { CardComponent, InputComponent, ButtonComponent, AlertComponent } from '../../../shared/components';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, CardComponent, InputComponent, ButtonComponent, AlertComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -74,5 +75,27 @@ export class LoginComponent {
       const control = this.loginForm.get(key);
       control?.markAsTouched();
     });
+  }
+
+  getEmailErrorMessage(): string {
+    const emailControl = this.email;
+    if (emailControl?.errors?.['required']) {
+      return 'El correo electrónico es obligatorio';
+    }
+    if (emailControl?.errors?.['email']) {
+      return 'Por favor ingresa una dirección de correo electrónico válida';
+    }
+    return '';
+  }
+
+  getPasswordErrorMessage(): string {
+    const passwordControl = this.password;
+    if (passwordControl?.errors?.['required']) {
+      return 'La contraseña es obligatoria';
+    }
+    if (passwordControl?.errors?.['minlength']) {
+      return 'La contraseña debe tener al menos 8 caracteres';
+    }
+    return '';
   }
 }
