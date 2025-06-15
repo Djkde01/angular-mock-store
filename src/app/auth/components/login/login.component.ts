@@ -60,7 +60,7 @@ export class LoginComponent {
         error: (error) => {
           this.loading = false;
           this.errorMessage =
-            error.message || 'Login failed. Please try again.';
+            error.message || 'Fallo al iniciar sesión. Por favor, inténtelo de nuevo.';
           console.error('Login error:', error);
         },
       });
