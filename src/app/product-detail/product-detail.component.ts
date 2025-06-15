@@ -4,11 +4,24 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
+import {
+  NavigationComponent,
+  LoadingSpinnerComponent,
+  AlertComponent,
+  RatingComponent
+} from '../shared/components';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NavigationComponent,
+    LoadingSpinnerComponent,
+    AlertComponent,
+    RatingComponent
+  ],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
