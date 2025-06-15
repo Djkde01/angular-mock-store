@@ -7,11 +7,33 @@ import { AuthService } from '../auth/services/auth.service';
 import { ProductService } from '../services/product.service';
 import { User } from '../auth/models/user.model';
 import { Product } from '../models/product.model';
+import {
+  PaginationComponent,
+  RatingComponent,
+  UserInfo,
+  NavItem,
+  NavigationComponent,
+  LoadingSpinnerComponent,
+  AlertComponent,
+  CardComponent,
+  ButtonComponent,
+} from '../shared/components';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    PaginationComponent,
+    RatingComponent,
+    NavigationComponent,
+    LoadingSpinnerComponent,
+    AlertComponent,
+    CardComponent,
+    ButtonComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
@@ -248,5 +270,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+
+  getUserInfo(): UserInfo | undefined {
+    if (!this.currentUser) return undefined;
+    return {
+      name: this.currentUser.firstName || this.currentUser.username || 'Usuario',
+      email: this.currentUser.email
+    };
   }
 }
