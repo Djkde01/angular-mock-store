@@ -35,6 +35,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         [class]="getInputClasses()"
         (input)="onInput($event)"
         (focus)="onFocus()"
+        (blur)="onTouched()"
       />
 
       <!-- Error Message -->
@@ -71,7 +72,7 @@ export class DateInputComponent implements ControlValueAccessor {
   value = '';
 
   private onChange = (value: string) => {};
-  private onTouched = () => {};
+  public onTouched = () => {};
 
   writeValue(value: string): void {
     this.value = value || '';
