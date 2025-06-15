@@ -1,17 +1,17 @@
-<div
+<main
   class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-indigo-50 py-12 px-4 sm:px-6 lg:px-8"
 >
-  <div class="max-w-lg w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
-    <div>
+  <app-card variant="form" customClasses="max-w-lg w-full">
+    <header class="text-center mb-8">
       <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-purple-100">
         <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
         </svg>
       </div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h1 class="mt-6 text-3xl font-extrabold text-gray-900">
         Crea tu cuenta
-      </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+      </h1>
+      <p class="mt-2 text-sm text-gray-600">
         O
         <a
           routerLink="/auth/login"
@@ -20,7 +20,7 @@
           inicia sesión en tu cuenta existente
         </a>
       </p>
-    </div>
+    </header>
 
     <form
       class="mt-8 space-y-6"
@@ -29,291 +29,117 @@
     >
       <div class="space-y-4">
         <!-- Full Name Field -->
-
-          <div>
-            <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
-            <input
-              id="fullName"
-              name="fullName"
-              type="text"
-              formControlName="fullName"
-              class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-              [class.border-red-300]="fullName?.invalid && fullName?.touched"
-              [class.focus:ring-red-500]="fullName?.invalid && fullName?.touched"
-              [class.focus:border-red-500]="fullName?.invalid && fullName?.touched"
-              placeholder="Ingresa tu nombre completo"
-            />
-            <div *ngIf="fullName?.invalid && (fullName?.touched || fullName?.dirty)" class="mt-2">
-              <p *ngIf="fullName?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                El nombre completo es obligatorio
-              </p>
-              <p *ngIf="fullName?.errors?.['minlength']" class="text-sm text-red-600 flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                El nombre completo debe tener al menos 2 caracteres
-              </p>
-            </div>
-          </div>
+        <app-input
+          id="fullName"
+          label="Nombre Completo"
+          type="text"
+          placeholder="Ingresa tu nombre completo"
+          formControlName="fullName"
+          [errorMessage]="getFieldError('fullName') || ''"
+          [showError]="hasFieldError('fullName')"
+        ></app-input>
 
         <!-- Email Field -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            formControlName="email"
-            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="email?.invalid && (email?.touched || email?.dirty)"
-            [class.focus:ring-red-500]="email?.invalid && (email?.touched || email?.dirty)"
-            [class.focus:border-red-500]="email?.invalid && (email?.touched || email?.dirty)"
-            placeholder="Ingresa tu dirección de correo electrónico"
-          />
-          <div *ngIf="email?.invalid && (email?.touched || email?.dirty)" class="mt-2">
-            <p *ngIf="email?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              El correo electrónico es obligatorio
-            </p>
-            <p *ngIf="email?.errors?.['email']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Ingresa una dirección de correo electrónico válida
-            </p>
-          </div>
-        </div>
+        <app-input
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="Ingresa tu dirección de correo electrónico"
+          formControlName="email"
+          [errorMessage]="getFieldError('email') || ''"
+          [showError]="hasFieldError('email')"
+        ></app-input>
 
         <!-- Password Field -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            formControlName="password"
-            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="password?.invalid && (password?.touched || password?.dirty)"
-            [class.focus:ring-red-500]="password?.invalid && (password?.touched || password?.dirty)"
-            [class.focus:border-red-500]="password?.invalid && (password?.touched || password?.dirty)"
-            placeholder="Crea una contraseña segura"
-          />
-          <div *ngIf="password?.invalid && (password?.touched || password?.dirty)" class="mt-2 space-y-1">
-            <p *ngIf="password?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              La contraseña es obligatoria
-            </p>
-            <p *ngIf="password?.errors?.['minlength']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              La contraseña debe tener al menos 8 caracteres
-            </p>
-            <p *ngIf="password?.errors?.['passwordStrength']" class="text-sm text-red-600 flex items-start">
-              <svg class="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial
-            </p>
-          </div>
-        </div>
+        <app-input
+          id="password"
+          label="Contraseña"
+          type="password"
+          placeholder="Crea una contraseña segura"
+          formControlName="password"
+          [errorMessage]="getFieldError('password') || ''"
+          [showError]="hasFieldError('password')"
+        ></app-input>
 
         <!-- Confirm Password Field -->
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirmar Contraseña</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            formControlName="confirmPassword"
-            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
-            [class.focus:ring-red-500]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
-            [class.focus:border-red-500]="(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
-            placeholder="Confirma tu contraseña"
-          />
-          <div *ngIf="confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)" class="mt-2">
-            <p *ngIf="confirmPassword?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Por favor confirma tu contraseña
-            </p>
-          </div>
-          <div *ngIf="registerForm.errors?.['passwordMismatch'] && (confirmPassword?.touched || confirmPassword?.dirty)" class="mt-2">
-            <p class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Las contraseñas no coinciden
-            </p>
-          </div>
-        </div>
+        <app-input
+          id="confirmPassword"
+          label="Confirmar Contraseña"
+          type="password"
+          placeholder="Confirma tu contraseña"
+          formControlName="confirmPassword"
+          [errorMessage]="getFieldError('confirmPassword') || ''"
+          [showError]="hasFieldError('confirmPassword')"
+        ></app-input>
 
         <!-- Date of Birth Field -->
-        <div>
-          <label for="dateOfBirth" class="block text-sm font-medium text-gray-700 mb-2">Fecha de Nacimiento</label>
-          <input
-            id="dateOfBirth"
-            name="dateOfBirth"
-            type="date"
-            formControlName="dateOfBirth"
-            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
-            [class.focus:ring-red-500]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
-            [class.focus:border-red-500]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
-            placeholder="Selecciona tu fecha de nacimiento"
-          />
-          <div *ngIf="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)" class="mt-2">
-            <p *ngIf="dateOfBirth?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              La fecha de nacimiento es obligatoria
-            </p>
-          </div>
-          <div *ngIf="dateOfBirth?.errors?.['minimumAge'] && (dateOfBirth?.touched || dateOfBirth?.dirty)" class="mt-2">
-            <p class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Debes tener al menos 13 años
-            </p>
-          </div>
-        </div>
+        <app-date-input
+          id="dateOfBirth"
+          label="Fecha de Nacimiento"
+          placeholder="Selecciona tu fecha de nacimiento"
+          formControlName="dateOfBirth"
+          [errorMessage]="getFieldError('dateOfBirth') || ''"
+          [showError]="hasFieldError('dateOfBirth')"
+        ></app-date-input>
 
-        <!-- Genre selection with box-style inputs -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-3">Selecciona tu género</label>
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <label *ngFor="let genreItem of genres"
-                   class="relative cursor-pointer">
-              <input
-                type="radio"
-                [value]="genreItem.value"
-                formControlName="genre"
-                (change)="onGenreChange(genreItem.value)"
-                class="sr-only peer"
-              />
-              <div class="flex items-center justify-center p-4 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all duration-200 peer-checked:border-purple-500 peer-checked:bg-purple-50 peer-checked:shadow-lg peer-checked:ring-2 peer-checked:ring-purple-200 peer-focus:ring-2 peer-focus:ring-purple-300 peer-focus:ring-offset-2">
-                <div class="text-center">
-                  <div class="text-2xl mb-1">
-                    {{ getGenreIcon(genreItem.value) }}
-                  </div>
-                  <span class="text-sm font-medium text-gray-700 peer-checked:text-purple-700">
-                    {{ genreItem.label }}
-                  </span>
-                </div>
-              </div>
-            </label>
-          </div>
-          <div *ngIf="genre?.invalid && (genre?.touched || genre?.dirty)" class="mt-2">
-            <p class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Por favor selecciona un género
-            </p>
-          </div>
-        </div>
+        <!-- Genre Selection -->
+        <app-radio-group
+          id="genre"
+          label="Selecciona tu género"
+          formControlName="genre"
+          [options]="genreOptions"
+          [errorMessage]="getFieldError('genre') || ''"
+          [showError]="hasFieldError('genre')"
+        ></app-radio-group>
 
-        <!-- Country dropdown -->
-        <div>
-          <label for="residenceCountry" class="block text-sm font-medium text-gray-700 mb-2">País</label>
-          <select
-            id="residenceCountry"
-            name="residenceCountry"
-            formControlName="residenceCountry"
-            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400"
-            [class.border-red-300]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
-            [class.focus:ring-red-500]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
-            [class.focus:border-red-500]="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)"
-          >
-            <option value="" disabled selected>Selecciona tu país</option>
-            <optgroup label="Americas">
-              <option *ngFor="let country of americasCountries" [value]="country.translations">{{country.flag}} {{ country.translations.spa.common }}</option>
-            </optgroup>
-            <optgroup label="Other Countries">
-              <option *ngFor="let country of otherCountries" [value]="country.translations">{{country.flag}} {{ country.translations.spa.common }}</option>
-            </optgroup>
-          </select>
-          <div *ngIf="residenceCountry?.invalid && (residenceCountry?.touched || residenceCountry?.dirty)" class="mt-2">
-            <p *ngIf="residenceCountry?.errors?.['required']" class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              El país es obligatorio
-            </p>
-          </div>
-        </div>
+        <!-- Country Selection -->
+        <app-select
+          id="residenceCountry"
+          label="País"
+          placeholder="Selecciona tu país"
+          formControlName="residenceCountry"
+          [optionGroups]="countryOptions"
+          [errorMessage]="getFieldError('residenceCountry') || ''"
+          [showError]="hasFieldError('residenceCountry')"
+        ></app-select>
 
-        <!-- Interests selection with box-style inputs -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-3">Selecciona tus intereses</label>
-          <div class="flex flex-wrap gap-3 flex-col sm:flex-row">
-            <ng-container *ngFor="let interest of interestOptions">
-              <label class="grow relative cursor-pointer">
-                <input
-                  type="checkbox"
-                  [value]="interest"
-                  (change)="onInterestChange(interest, $event)"
-                  class="sr-only peer"
-                />
-                <div class="px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all duration-200 peer-checked:border-purple-500 peer-checked:bg-purple-50 peer-checked:shadow-lg peer-checked:ring-2 peer-checked:ring-purple-200 peer-focus:ring-2 peer-focus:ring-purple-300 peer-focus:ring-offset-2">
-                  <div class="text-sm font-medium text-center text-gray-700 select-none">
-                      {{ interest }}
-                  </div>
-                </div>
-              </label>
-            </ng-container>
-          </div>
-          <div *ngIf="interests?.invalid && (interests?.touched || interests?.dirty)" class="mt-2">
-            <p class="text-sm text-red-600 flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-              </svg>
-              Por favor selecciona al menos un interés
-            </p>
-          </div>
-        </div>
+        <!-- Interests Selection -->
+        <app-checkbox-group
+          id="interests"
+          label="Selecciona tus intereses"
+          formControlName="interests"
+          [options]="interestOptions"
+          [errorMessage]="getFieldError('interests') || ''"
+          [showError]="hasFieldError('interests')"
+        ></app-checkbox-group>
       </div>
 
       <!-- Success Message -->
-      <div *ngIf="successMessage" class="bg-green-50 border-l-4 border-green-400 text-green-700 px-4 py-3 rounded-r-md flex items-center animate-pulse">
-        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-        </svg>
-        {{ successMessage }}
-      </div>
+      <app-alert
+        *ngIf="successMessage"
+        type="success"
+        [message]="successMessage"
+      ></app-alert>
 
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-400 text-red-700 px-4 py-3 rounded-r-md flex items-center animate-pulse">
-        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-        </svg>
-        {{ errorMessage }}
-      </div>
+      <app-alert
+        *ngIf="errorMessage"
+        type="error"
+        [message]="errorMessage"
+      ></app-alert>
 
       <!-- Submit Button -->
-      <div>
-        <button
-          type="submit"
-          [disabled]="loading"
-          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
-        >
-          <span *ngIf="loading" class="absolute left-0 inset-y-0 flex items-center pl-3">
-            <div class="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-          </span>
-          {{ loading ? "Creando cuenta..." : "Crear cuenta" }}
-        </button>
-      </div>
+      <app-button
+        type="submit"
+        variant="primary"
+        size="lg"
+        [disabled]="loading"
+        [loading]="loading"
+        loadingText="Creando cuenta..."
+        customClasses="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+      >
+        Crear cuenta
+      </app-button>
     </form>
-  </div>
-</div>
+  </app-card>
+</main>

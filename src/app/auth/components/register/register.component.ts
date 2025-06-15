@@ -12,11 +12,37 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequest, Country } from '../../models/user.model';
+import {
+  CardComponent,
+  InputComponent,
+  ButtonComponent,
+  AlertComponent,
+  DateInputComponent,
+  SelectComponent,
+  RadioGroupComponent,
+  CheckboxGroupComponent,
+  SelectOption,
+  SelectOptionGroup,
+  RadioOption,
+  CheckboxOption
+} from '../../../shared/components';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterLink,
+    CardComponent,
+    InputComponent,
+    ButtonComponent,
+    AlertComponent,
+    DateInputComponent,
+    SelectComponent,
+    RadioGroupComponent,
+    CheckboxGroupComponent
+  ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
@@ -30,18 +56,33 @@ export class RegisterComponent implements OnInit {
   otherCountries: Country[] = [];
   loadingCountries = true;
 
-  genres = [
-    { value: 'male', label: 'Masculino' },
-    { value: 'female', label: 'Femenino' },
-    { value: 'other', label: 'Otro' },
-    { value: 'prefer-not-to-say', label: 'Prefiero no decir' }
+  genreOptions: RadioOption[] = [
+    { value: 'male', label: 'Masculino', icon: '👨' },
+    { value: 'female', label: 'Femenino', icon: '👩' },
+    { value: 'other', label: 'Otro', icon: '🌈' },
+    { value: 'prefer-not-to-say', label: 'Prefiero no decir', icon: '👥' }
   ];
 
-  interestOptions = [
-    'Tecnología', 'Deportes', 'Música', 'Arte', 'Cocina', 'Viajes',
-    'Lectura', 'Cine', 'Fotografía', 'Gaming', 'Fitness', 'Naturaleza',
-    'Ciencia', 'Historia', 'Moda', 'Negocios'
+  interestOptions: CheckboxOption[] = [
+    { value: 'tecnologia', label: 'Tecnología' },
+    { value: 'deportes', label: 'Deportes' },
+    { value: 'musica', label: 'Música' },
+    { value: 'arte', label: 'Arte' },
+    { value: 'cocina', label: 'Cocina' },
+    { value: 'viajes', label: 'Viajes' },
+    { value: 'lectura', label: 'Lectura' },
+    { value: 'cine', label: 'Cine' },
+    { value: 'fotografia', label: 'Fotografía' },
+    { value: 'gaming', label: 'Gaming' },
+    { value: 'fitness', label: 'Fitness' },
+    { value: 'naturaleza', label: 'Naturaleza' },
+    { value: 'ciencia', label: 'Ciencia' },
+    { value: 'historia', label: 'Historia' },
+    { value: 'moda', label: 'Moda' },
+    { value: 'negocios', label: 'Negocios' }
   ];
+
+  countryOptions: SelectOptionGroup[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +104,7 @@ export class RegisterComponent implements OnInit {
         confirmPassword: ['', [Validators.required]],
         dateOfBirth: ['', [Validators.required, this.ageValidator]],
         genre: ['', [Validators.required]],
-        interests: this.fb.array([], [Validators.required]),
+        interests: ['', [Validators.required]],
         residenceCountry: ['', [Validators.required]]
       },
       { validators: this.passwordMatchValidator }
@@ -89,6 +130,24 @@ export class RegisterComponent implements OnInit {
         this.otherCountries = this.countries.filter(
           (country) => country.region !== 'Americas'
         );
+
+        // Create country options for SelectComponent
+        this.countryOptions = [
+          {
+            label: 'Americas',
+            options: this.americasCountries.map(country => ({
+              value: country.alpha2Code || country.name.common,
+              label: `${country.flag} ${country.translations?.spa?.common || country.name.common}`
+            }))
+          },
+          {
+            label: 'Other Countries',
+            options: this.otherCountries.map(country => ({
+              value: country.alpha2Code || country.name.common,
+              label: `${country.flag} ${country.translations?.spa?.common || country.name.common}`
+            }))
+          }
+        ];
       },
       error: (error) => {
         this.loadingCountries = false;
@@ -164,6 +223,7 @@ export class RegisterComponent implements OnInit {
       confirmPassword &&
       password.value !== confirmPassword.value
     ) {
+      confirmPassword.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     }
     return null;
@@ -188,26 +248,72 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.get('genre');
   }
   get interests() {
-    return this.registerForm.get('interests') as FormArray;
+    return this.registerForm.get('interests');
   }
   get residenceCountry() {
     return this.registerForm.get('residenceCountry');
   }
 
-  onInterestChange(interest: string, event: any): void {
-    const interestsArray = this.interests;
-    if (event.target.checked) {
-      interestsArray.push(this.fb.control(interest));
-    } else {
-      const index = interestsArray.controls.findIndex(x => x.value === interest);
-      if (index >= 0) {
-        interestsArray.removeAt(index);
-      }
-    }
+  // Helper methods for form validation
+  hasFieldError(fieldName: string): boolean {
+    const field = this.registerForm.get(fieldName);
+    return !!(field && field.invalid && (field.touched || field.dirty));
   }
 
-  isInterestSelected(interest: string): boolean {
-    return this.interests.controls.some(control => control.value === interest);
+  getFieldError(fieldName: string): string {
+    const field = this.registerForm.get(fieldName);
+    if (!field || field.valid || (!field.touched && !field.dirty)) {
+      return '';
+    }
+
+    const errors = field.errors;
+    if (!errors) return '';
+
+    // Handle specific field errors
+    if (fieldName === 'fullName') {
+      if (errors['required']) return 'El nombre completo es obligatorio';
+      if (errors['minlength']) return 'El nombre debe tener al menos 2 caracteres';
+      if (errors['noSpecialCharacters']) return 'El nombre no puede contener caracteres especiales';
+    }
+
+    if (fieldName === 'email') {
+      if (errors['required']) return 'El email es obligatorio';
+      if (errors['email']) return 'Ingresa un email válido';
+    }
+
+    if (fieldName === 'password') {
+      if (errors['required']) return 'La contraseña es obligatoria';
+      if (errors['minlength']) return 'La contraseña debe tener al menos 8 caracteres';
+      if (errors['passwordStrength']) return 'La contraseña debe contener al menos: una mayúscula, una minúscula, un número y un carácter especial';
+    }
+
+    if (fieldName === 'confirmPassword') {
+      if (errors['required']) return 'Confirma tu contraseña';
+      // Check for form-level password mismatch error
+      const formErrors = this.registerForm.errors;
+      if (formErrors && formErrors['passwordMismatch']) {
+        return 'Las contraseñas no coinciden';
+      }
+    }
+
+    if (fieldName === 'dateOfBirth') {
+      if (errors['required']) return 'La fecha de nacimiento es obligatoria';
+      if (errors['minimumAge']) return 'Debes tener al menos 13 años';
+    }
+
+    if (fieldName === 'genre') {
+      if (errors['required']) return 'Por favor selecciona un género';
+    }
+
+    if (fieldName === 'interests') {
+      if (errors['required']) return 'Por favor selecciona al menos un interés';
+    }
+
+    if (fieldName === 'residenceCountry') {
+      if (errors['required']) return 'El país es obligatorio';
+    }
+
+    return 'Campo requerido';
   }
 
   generateUsername(fullName: string): string {
@@ -217,27 +323,6 @@ export class RegisterComponent implements OnInit {
       .replace(/[\u0300-\u036f]/g, '') // Remove accents
       .replace(/\s+/g, '_') // Replace spaces with underscores
       .replace(/[^a-z0-9_]/g, ''); // Remove any remaining special characters
-  }
-
-  onGenreChange(event: string): void {
-    const selectedGenre = event.toLocaleLowerCase();
-    this.registerForm.patchValue({ genre: selectedGenre });
-  }
-
-  getGenreIcon(genre: string): string {
-    switch (genre.toLowerCase()) {
-      case
-        'male':
-        return '👨';
-      case 'female':
-        return '👩';
-      case 'other':
-        return '🌈';
-      case 'prefer-not-to-say':
-        return '👥';
-      default:
-        return '❓';
-    }
   }
 
   onSubmit(): void {
