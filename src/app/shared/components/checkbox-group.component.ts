@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export interface CheckboxOption {
   value: any;
   label: string;
+  icon?: string;
   disabled?: boolean;
 }
 
@@ -21,7 +22,7 @@ export interface CheckboxOption {
   ],
   template: `
     <div class="space-y-3">
-      <label *ngIf="label" class="block text-sm font-medium text-gray-700">
+      <label *ngIf="label" class="block text-sm font-medium text-gray-700 legend">
         {{ label }}
         <span *ngIf="required" class="text-red-500 ml-1">*</span>
       </label>
@@ -43,8 +44,13 @@ export interface CheckboxOption {
             class="sr-only peer"
           />
           <div [class]="getOptionClasses()">
-            <div class="text-sm font-medium text-center text-gray-700 select-none">
-              {{ option.label }}
+            <div class="text-center">
+              <div *ngIf="option.icon" class="text-2xl mb-1">
+                {{ option.icon }}
+              </div>
+              <div class="text-sm font-medium text-gray-700 select-none">
+                {{ option.label }}
+              </div>
             </div>
           </div>
         </label>

@@ -9,7 +9,7 @@ export type SpinnerVariant = 'primary' | 'secondary' | 'white';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="getContainerClasses()">
+    <div [class]="getContainerClasses()" role="status" aria-label="Loading">
       <!-- Spinner -->
       <div [class]="getSpinnerClasses()"></div>
 

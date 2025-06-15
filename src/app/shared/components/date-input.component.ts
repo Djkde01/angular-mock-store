@@ -66,8 +66,6 @@ export class DateInputComponent implements ControlValueAccessor {
   @Input() errorMessage = '';
   @Input() helperText = '';
   @Input() showError = false;
-  @Input() min = '';
-  @Input() max = '';
 
   value = '';
 

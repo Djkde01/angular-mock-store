@@ -22,7 +22,7 @@ export interface RadioOption {
   ],
   template: `
     <div class="space-y-3 mb-2">
-      <label *ngIf="label" class="block text-sm font-medium text-gray-700">
+      <label *ngIf="label" class="block text-sm font-medium text-gray-700 legend">
         {{ label }}
         <span *ngIf="required" class="text-red-500 ml-1">*</span>
       </label>
@@ -110,6 +110,10 @@ export class RadioGroupComponent implements ControlValueAccessor {
   onSelectionChange(value: any): void {
     this.value = value;
     this.onChange(value);
+  }
+
+  isSelected(optionValue: any): boolean {
+    return this.value === optionValue;
   }
 
   trackByValue(index: number, option: RadioOption): any {
