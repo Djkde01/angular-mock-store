@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,12 +9,25 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/user.model';
-import { CardComponent, InputComponent, ButtonComponent, AlertComponent } from '../../../shared/components';
+import {
+  CardComponent,
+  InputComponent,
+  ButtonComponent,
+  AlertComponent,
+} from '../../../shared/components';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink, CardComponent, InputComponent, ButtonComponent, AlertComponent],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterLink,
+    CardComponent,
+    InputComponent,
+    ButtonComponent,
+    AlertComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -23,11 +36,10 @@ export class LoginComponent {
   loading = false;
   errorMessage = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  fb = inject(FormBuilder);
+  authService = inject(AuthService);
+  router = inject(Router);
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -61,7 +73,8 @@ export class LoginComponent {
         error: (error) => {
           this.loading = false;
           this.errorMessage =
-            error.message || 'Fallo al iniciar sesión. Por favor, inténtelo de nuevo.';
+            error.message ||
+            'Fallo al iniciar sesión. Por favor, inténtelo de nuevo.';
           console.error('Login error:', error);
         },
       });

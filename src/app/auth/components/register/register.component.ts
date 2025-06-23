@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   AbstractControl,
   ValidationErrors,
-  FormArray,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -21,10 +20,9 @@ import {
   SelectComponent,
   RadioGroupComponent,
   CheckboxGroupComponent,
-  SelectOption,
   SelectOptionGroup,
   RadioOption,
-  CheckboxOption
+  CheckboxOption,
 } from '../../../shared/components';
 
 @Component({
@@ -41,7 +39,7 @@ import {
     DateInputComponent,
     SelectComponent,
     RadioGroupComponent,
-    CheckboxGroupComponent
+    CheckboxGroupComponent,
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
@@ -60,7 +58,7 @@ export class RegisterComponent implements OnInit {
     { value: 'male', label: 'Masculino', icon: '👨' },
     { value: 'female', label: 'Femenino', icon: '👩' },
     { value: 'other', label: 'Otro', icon: '🌈' },
-    { value: 'prefer-not-to-say', label: 'Prefiero no decir', icon: '👥' }
+    { value: 'prefer-not-to-say', label: 'Prefiero no decir', icon: '👥' },
   ];
 
   interestOptions: CheckboxOption[] = [
@@ -79,19 +77,25 @@ export class RegisterComponent implements OnInit {
     { value: 'ciencia', label: 'Ciencia' },
     { value: 'historia', label: 'Historia' },
     { value: 'moda', label: 'Moda' },
-    { value: 'negocios', label: 'Negocios' }
+    { value: 'negocios', label: 'Negocios' },
   ];
 
   countryOptions: SelectOptionGroup[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-  ) {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  constructor() {
     this.registerForm = this.fb.group(
       {
-        fullName: ['', [Validators.required, Validators.minLength(2), this.noSpecialCharactersValidator]],
+        fullName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            this.noSpecialCharactersValidator,
+          ],
+        ],
         email: ['', [Validators.required, Validators.email]],
         password: [
           '',
@@ -105,7 +109,7 @@ export class RegisterComponent implements OnInit {
         dateOfBirth: ['', [Validators.required, this.ageValidator]],
         genre: ['', [Validators.required]],
         interests: ['', [Validators.required]],
-        residenceCountry: ['', [Validators.required]]
+        residenceCountry: ['', [Validators.required]],
       },
       { validators: this.passwordMatchValidator }
     );
@@ -116,7 +120,13 @@ export class RegisterComponent implements OnInit {
   }
 
   loadCountries(): void {
-    const countries = this.authService.loadCountries(['name', 'region', 'translations', 'flag', 'alpha2Code']);
+    const countries = this.authService.loadCountries([
+      'name',
+      'region',
+      'translations',
+      'flag',
+      'alpha2Code',
+    ]);
     countries.subscribe({
       next: (data: Country[]) => {
         this.countries = data;
@@ -135,25 +145,30 @@ export class RegisterComponent implements OnInit {
         this.countryOptions = [
           {
             label: 'Americas',
-            options: this.americasCountries.map(country => ({
+            options: this.americasCountries.map((country) => ({
               value: country.alpha2Code || country.name.common,
-              label: `${country.flag} ${country.translations?.spa?.common || country.name.common}`
-            }))
+              label: `${country.flag} ${
+                country.translations?.spa?.common || country.name.common
+              }`,
+            })),
           },
           {
             label: 'Other Countries',
-            options: this.otherCountries.map(country => ({
+            options: this.otherCountries.map((country) => ({
               value: country.alpha2Code || country.name.common,
-              label: `${country.flag} ${country.translations?.spa?.common || country.name.common}`
-            }))
-          }
+              label: `${country.flag} ${
+                country.translations?.spa?.common || country.name.common
+              }`,
+            })),
+          },
         ];
       },
       error: (error) => {
         this.loadingCountries = false;
-        this.errorMessage = 'No se pudieron cargar los países. Por favor, inténtelo de nuevo más tarde.';
+        this.errorMessage =
+          'No se pudieron cargar los países. Por favor, inténtelo de nuevo más tarde.';
         console.error('Error loading countries:', error);
-      }
+      },
     });
   }
 
@@ -168,7 +183,9 @@ export class RegisterComponent implements OnInit {
   }
 
   // Custom validator for no special characters in full name
-  noSpecialCharactersValidator(control: AbstractControl): ValidationErrors | null {
+  noSpecialCharactersValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
 
@@ -189,7 +206,10 @@ export class RegisterComponent implements OnInit {
     const age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       return age < 13 ? { minimumAge: true } : null;
     }
 
@@ -272,8 +292,10 @@ export class RegisterComponent implements OnInit {
     // Handle specific field errors
     if (fieldName === 'fullName') {
       if (errors['required']) return 'El nombre completo es obligatorio';
-      if (errors['minlength']) return 'El nombre debe tener al menos 2 caracteres';
-      if (errors['noSpecialCharacters']) return 'El nombre no puede contener caracteres especiales';
+      if (errors['minlength'])
+        return 'El nombre debe tener al menos 2 caracteres';
+      if (errors['noSpecialCharacters'])
+        return 'El nombre no puede contener caracteres especiales';
     }
 
     if (fieldName === 'email') {
@@ -283,8 +305,10 @@ export class RegisterComponent implements OnInit {
 
     if (fieldName === 'password') {
       if (errors['required']) return 'La contraseña es obligatoria';
-      if (errors['minlength']) return 'La contraseña debe tener al menos 8 caracteres';
-      if (errors['passwordStrength']) return 'La contraseña debe contener al menos: una mayúscula, una minúscula, un número y un carácter especial';
+      if (errors['minlength'])
+        return 'La contraseña debe tener al menos 8 caracteres';
+      if (errors['passwordStrength'])
+        return 'La contraseña debe contener al menos: una mayúscula, una minúscula, un número y un carácter especial';
     }
 
     if (fieldName === 'confirmPassword') {
@@ -336,7 +360,8 @@ export class RegisterComponent implements OnInit {
 
       const registerData: RegisterRequest = {
         firstName: fullName.split(' ')[0],
-        lastName: fullName.split(' ').slice(1).join(' ') || fullName.split(' ')[0],
+        lastName:
+          fullName.split(' ').slice(1).join(' ') || fullName.split(' ')[0],
         username: username,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
@@ -359,7 +384,8 @@ export class RegisterComponent implements OnInit {
         error: (error) => {
           this.loading = false;
           this.errorMessage =
-            error.message || 'Fallo al crear la cuenta. Por favor, inténtelo de nuevo.';
+            error.message ||
+            'Fallo al crear la cuenta. Por favor, inténtelo de nuevo.';
           console.error('Registration error:', error);
         },
       });
