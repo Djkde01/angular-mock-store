@@ -20,7 +20,7 @@ import { InputComponent, InputType } from '../input.component';
       [showError]="showError"
       [formControl]="formControl"
     ></app-input>
-  `
+  `,
 })
 class TestHostComponent {
   id = 'test-input';
@@ -42,13 +42,14 @@ describe('InputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent]
-    })
-    .compileComponents();
+      imports: [TestHostComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     hostComponent = fixture.componentInstance;
-    component = fixture.debugElement.query(By.directive(InputComponent)).componentInstance;
+    component = fixture.debugElement.query(
+      By.directive(InputComponent)
+    ).componentInstance;
     fixture.detectChanges();
   });
 
@@ -109,7 +110,9 @@ describe('InputComponent', () => {
     fixture.detectChanges();
 
     const errorElement = fixture.debugElement.query(By.css('.text-red-600'));
-    expect(errorElement.nativeElement.textContent.trim()).toBe('This field is required');
+    expect(errorElement.nativeElement.textContent.trim()).toBe(
+      'This field is required'
+    );
   });
 
   it('should not show error message when showError is false', () => {
@@ -126,7 +129,9 @@ describe('InputComponent', () => {
     fixture.detectChanges();
 
     const helperElement = fixture.debugElement.query(By.css('.text-gray-500'));
-    expect(helperElement.nativeElement.textContent.trim()).toBe('This is helper text');
+    expect(helperElement.nativeElement.textContent.trim()).toBe(
+      'This is helper text'
+    );
   });
 
   it('should apply error styles when showError is true', () => {
@@ -135,7 +140,9 @@ describe('InputComponent', () => {
 
     const inputElement = fixture.debugElement.query(By.css('input'));
     expect(inputElement.nativeElement.className).toContain('border-gray-300');
-    expect(inputElement.nativeElement.className).toContain('focus:ring-indigo-500');
+    expect(inputElement.nativeElement.className).toContain(
+      'focus:ring-indigo-500'
+    );
   });
 
   it('should work with different input types', () => {
@@ -163,7 +170,7 @@ describe('InputComponent', () => {
       changedValue = value;
     });
 
-    component.onInput({ target: { value: 'new value' } } as any);
+    component.onInput({ target: { value: 'new value' } } as unknown as Event);
     expect(changedValue).toBe('new value');
 
     // Test registerOnTouched

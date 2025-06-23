@@ -2,7 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { SelectComponent, SelectOption, SelectOptionGroup } from '../select.component';
+import {
+  SelectComponent,
+  SelectOption,
+  SelectOptionGroup,
+} from '../select.component';
 
 @Component({
   standalone: true,
@@ -21,7 +25,7 @@ import { SelectComponent, SelectOption, SelectOptionGroup } from '../select.comp
       [optionGroups]="optionGroups"
       [formControl]="formControl"
     ></app-select>
-  `
+  `,
 })
 class TestHostComponent {
   id = 'test-select';
@@ -37,7 +41,7 @@ class TestHostComponent {
   options: SelectOption[] = [
     { value: 'option1', label: 'Option 1' },
     { value: 'option2', label: 'Option 2' },
-    { value: 'option3', label: 'Option 3', disabled: true }
+    { value: 'option3', label: 'Option 3', disabled: true },
   ];
 
   optionGroups: SelectOptionGroup[] = [
@@ -45,15 +49,13 @@ class TestHostComponent {
       label: 'Group 1',
       options: [
         { value: 'group1-option1', label: 'Group 1 Option 1' },
-        { value: 'group1-option2', label: 'Group 1 Option 2' }
-      ]
+        { value: 'group1-option2', label: 'Group 1 Option 2' },
+      ],
     },
     {
       label: 'Group 2',
-      options: [
-        { value: 'group2-option1', label: 'Group 2 Option 1' }
-      ]
-    }
+      options: [{ value: 'group2-option1', label: 'Group 2 Option 1' }],
+    },
   ];
 }
 
@@ -64,13 +66,14 @@ describe('SelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent]
-    })
-    .compileComponents();
+      imports: [TestHostComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     hostComponent = fixture.componentInstance;
-    component = fixture.debugElement.query(By.directive(SelectComponent)).componentInstance;
+    component = fixture.debugElement.query(
+      By.directive(SelectComponent)
+    ).componentInstance;
     fixture.detectChanges();
   });
 
@@ -96,7 +99,9 @@ describe('SelectComponent', () => {
     const placeholderOption = selectElement.query(By.css('option[value=""]'));
 
     expect(placeholderOption).toBeTruthy();
-    expect(placeholderOption.nativeElement.textContent.trim()).toBe('Select an option');
+    expect(placeholderOption.nativeElement.textContent.trim()).toBe(
+      'Select an option'
+    );
     expect(placeholderOption.nativeElement.disabled).toBe(true);
   });
 
@@ -105,7 +110,9 @@ describe('SelectComponent', () => {
     hostComponent.optionGroups = [];
     fixture.detectChanges();
 
-    const options = fixture.debugElement.queryAll(By.css('option:not([value=""])'));
+    const options = fixture.debugElement.queryAll(
+      By.css('option:not([value=""])')
+    );
     expect(options.length).toBe(3);
 
     expect(options[0].nativeElement.value).toBe('option1');
@@ -158,7 +165,9 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     const errorElement = fixture.debugElement.query(By.css('.text-red-600'));
-    expect(errorElement.nativeElement.textContent.trim()).toBe('This field is required');
+    expect(errorElement.nativeElement.textContent.trim()).toBe(
+      'This field is required'
+    );
   });
 
   it('should show helper text when provided and no error', () => {
@@ -166,7 +175,9 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     const helperElement = fixture.debugElement.query(By.css('.text-gray-500'));
-    expect(helperElement.nativeElement.textContent.trim()).toBe('This is helper text');
+    expect(helperElement.nativeElement.textContent.trim()).toBe(
+      'This is helper text'
+    );
   });
 
   it('should apply error styles when showError is true', () => {
@@ -175,7 +186,9 @@ describe('SelectComponent', () => {
 
     const selectElement = fixture.debugElement.query(By.css('select'));
     expect(selectElement.nativeElement.className).toContain('border-red-300');
-    expect(selectElement.nativeElement.className).toContain('focus:ring-red-500');
+    expect(selectElement.nativeElement.className).toContain(
+      'focus:ring-red-500'
+    );
   });
 
   it('should implement ControlValueAccessor correctly', () => {
@@ -184,14 +197,14 @@ describe('SelectComponent', () => {
     expect(component.value).toBe('test-value');
 
     // Test registerOnChange
-    let changedValue = '';
-    component.registerOnChange((value: string) => {
+    let changedValue: string | number | null = '';
+    component.registerOnChange((value: string | number | null) => {
       changedValue = value;
     });
 
     const mockEvent = {
-      target: { value: 'new-value' }
-    } as any;
+      target: { value: 'new-value' },
+    } as unknown as Event;
 
     component.onSelectionChange(mockEvent);
     expect(changedValue).toBe('new-value');
@@ -225,6 +238,8 @@ describe('SelectComponent', () => {
     hostComponent.disabled = true;
     fixture.detectChanges();
     expect(selectElement.nativeElement.className).toContain('bg-gray-50');
-    expect(selectElement.nativeElement.className).toContain('cursor-not-allowed');
+    expect(selectElement.nativeElement.className).toContain(
+      'cursor-not-allowed'
+    );
   });
 });

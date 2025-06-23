@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { NavigationComponent, NavItem, UserInfo } from '../navigation.component';
+import {
+  NavigationComponent,
+  NavItem,
+  UserInfo,
+} from '../navigation.component';
 
 @Component({
   standalone: true,
@@ -18,14 +22,14 @@ import { NavigationComponent, NavItem, UserInfo } from '../navigation.component'
       (logout)="onLogout()"
       (backClick)="onBackClick()"
     ></app-navigation>
-  `
+  `,
 })
 class TestHostComponent {
   title = 'Test App';
   navItems: NavItem[] = [
     { label: 'Home', href: '/' },
-    { label: 'Products', href: '/products'},
-    { label: 'About', href: '/about'}
+    { label: 'Products', href: '/products' },
+    { label: 'About', href: '/about' },
   ];
   userInfo: UserInfo = {
     name: 'John Doe',
@@ -54,13 +58,14 @@ describe('NavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent]
-    })
-    .compileComponents();
+      imports: [TestHostComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     hostComponent = fixture.componentInstance;
-    component = fixture.debugElement.query(By.directive(NavigationComponent)).componentInstance;
+    component = fixture.debugElement.query(
+      By.directive(NavigationComponent)
+    ).componentInstance;
     fixture.detectChanges();
   });
 
@@ -78,7 +83,9 @@ describe('NavigationComponent', () => {
     expect(navLinks.length).toBeGreaterThanOrEqual(3);
 
     // Check if nav items are rendered (text content)
-    const navTexts = navLinks.map(link => link.nativeElement.textContent.trim());
+    const navTexts = navLinks.map((link) =>
+      link.nativeElement.textContent.trim()
+    );
     expect(navTexts).toContain('Home');
     expect(navTexts).toContain('Products');
     expect(navTexts).toContain('About');
@@ -92,28 +99,34 @@ describe('NavigationComponent', () => {
 
   it('should show user info when userInfo is provided', () => {
     const userElements = fixture.debugElement.queryAll(By.css('*'));
-    const hasUserInfo = userElements.some(el =>
-      el.nativeElement.textContent && el.nativeElement.textContent.includes('John Doe')
+    const hasUserInfo = userElements.some(
+      (el) =>
+        el.nativeElement.textContent &&
+        el.nativeElement.textContent.includes('John Doe')
     );
     expect(hasUserInfo).toBe(true);
   });
 
   it('should not show user info when userInfo is null', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     hostComponent.userInfo = undefined as any;
     fixture.detectChanges();
 
     const userElements = fixture.debugElement.queryAll(By.css('*'));
-    const hasUserInfo = userElements.some(el =>
-      el.nativeElement.textContent && el.nativeElement.textContent.includes('John Doe')
+    const hasUserInfo = userElements.some(
+      (el) =>
+        el.nativeElement.textContent &&
+        el.nativeElement.textContent.includes('John Doe')
     );
     expect(hasUserInfo).toBe(false);
   });
 
   it('should show logout button when showLogoutButton is true', () => {
-    const logoutButton = fixture.debugElement.query(By.css('button'));
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const hasLogoutButton = buttons.some(btn =>
-      btn.nativeElement.textContent && btn.nativeElement.textContent.includes('Logout')
+    const hasLogoutButton = buttons.some(
+      (btn) =>
+        btn.nativeElement.textContent &&
+        btn.nativeElement.textContent.includes('Logout')
     );
     expect(hasLogoutButton).toBe(true);
   });
@@ -123,16 +136,20 @@ describe('NavigationComponent', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const hasLogoutButton = buttons.some(btn =>
-      btn.nativeElement.textContent && btn.nativeElement.textContent.includes('Logout')
+    const hasLogoutButton = buttons.some(
+      (btn) =>
+        btn.nativeElement.textContent &&
+        btn.nativeElement.textContent.includes('Logout')
     );
     expect(hasLogoutButton).toBe(false);
   });
 
   it('should emit logout event when logout button is clicked', () => {
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const logoutButton = buttons.find(btn =>
-      btn.nativeElement.textContent && btn.nativeElement.textContent.includes('Logout')
+    const logoutButton = buttons.find(
+      (btn) =>
+        btn.nativeElement.textContent &&
+        btn.nativeElement.textContent.includes('Logout')
     );
 
     if (logoutButton) {
@@ -143,24 +160,33 @@ describe('NavigationComponent', () => {
 
   it('should navigate when nav item is clicked', () => {
     const navLinks = fixture.debugElement.queryAll(By.css('nav a, nav button'));
-    const productsLink = navLinks.find(link =>
-      link.nativeElement.textContent && link.nativeElement.textContent.includes('Products')
+    const productsLink = navLinks.find(
+      (link) =>
+        link.nativeElement.textContent &&
+        link.nativeElement.textContent.includes('Products')
     );
 
     // Just verify the link exists and can be clicked
     if (productsLink) {
-      expect(productsLink.nativeElement.href || productsLink.nativeElement.getAttribute('href')).toContain('/products');
+      expect(
+        productsLink.nativeElement.href ||
+          productsLink.nativeElement.getAttribute('href')
+      ).toContain('/products');
     }
   });
 
   it('should show mobile menu button on small screens', () => {
     // Look for hamburger menu button (usually has 3 lines or specific mobile menu icon)
-    const mobileMenuButton = fixture.debugElement.query(By.css('button[aria-label*="menu"], button[aria-expanded]'));
+    const mobileMenuButton = fixture.debugElement.query(
+      By.css('button[aria-label*="menu"], button[aria-expanded]')
+    );
     expect(mobileMenuButton).toBeTruthy();
   });
 
   it('should emit mobile menu toggle when mobile menu button is clicked', () => {
-    const mobileMenuButton = fixture.debugElement.query(By.css('button[aria-label*="menu"], button[aria-expanded]'));
+    const mobileMenuButton = fixture.debugElement.query(
+      By.css('button[aria-label*="menu"], button[aria-expanded]')
+    );
 
     if (mobileMenuButton) {
       mobileMenuButton.nativeElement.click();
@@ -170,7 +196,9 @@ describe('NavigationComponent', () => {
   });
 
   it('should handle responsive design', () => {
-    const containerElement = fixture.debugElement.query(By.css('nav, header, div'));
+    const containerElement = fixture.debugElement.query(
+      By.css('nav, header, div')
+    );
     // Component should exist and have responsive design
     expect(containerElement).toBeTruthy();
   });
@@ -196,10 +224,14 @@ describe('NavigationComponent', () => {
     expect(navElement).toBeTruthy();
 
     // Check for ARIA attributes
-    const mobileMenuButton = fixture.debugElement.query(By.css('button[aria-expanded], button[aria-label]'));
+    const mobileMenuButton = fixture.debugElement.query(
+      By.css('button[aria-expanded], button[aria-label]')
+    );
     if (mobileMenuButton) {
-      expect(mobileMenuButton.nativeElement.hasAttribute('aria-expanded') ||
-             mobileMenuButton.nativeElement.hasAttribute('aria-label')).toBe(true);
+      expect(
+        mobileMenuButton.nativeElement.hasAttribute('aria-expanded') ||
+          mobileMenuButton.nativeElement.hasAttribute('aria-label')
+      ).toBe(true);
     }
   });
 
@@ -208,7 +240,9 @@ describe('NavigationComponent', () => {
     expect(component.mobileMenuOpen).toBe(false);
 
     // Mobile menu should not be visible initially
-    const mobileMenuItems = fixture.debugElement.queryAll(By.css('.md\\:hidden.border-t'));
+    const mobileMenuItems = fixture.debugElement.queryAll(
+      By.css('.md\\:hidden.border-t')
+    );
     if (mobileMenuItems.length > 0) {
       expect(mobileMenuItems[0]).toBeFalsy();
     }
@@ -216,9 +250,10 @@ describe('NavigationComponent', () => {
 
   it('should have responsive design classes', () => {
     const containerElement = fixture.debugElement.query(By.css('div'));
-    const hasResponsiveClasses = containerElement.nativeElement.className.includes('sm:') ||
-                                 containerElement.nativeElement.className.includes('md:') ||
-                                 containerElement.nativeElement.className.includes('lg:');
+    const hasResponsiveClasses =
+      containerElement.nativeElement.className.includes('sm:') ||
+      containerElement.nativeElement.className.includes('md:') ||
+      containerElement.nativeElement.className.includes('lg:');
     expect(hasResponsiveClasses).toBe(true);
   });
 
@@ -227,8 +262,10 @@ describe('NavigationComponent', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    const hasCustomLogoutText = buttons.some(btn =>
-      btn.nativeElement.textContent && btn.nativeElement.textContent.includes('Sign Out')
+    const hasCustomLogoutText = buttons.some(
+      (btn) =>
+        btn.nativeElement.textContent &&
+        btn.nativeElement.textContent.includes('Sign Out')
     );
     expect(hasCustomLogoutText).toBe(true);
   });
