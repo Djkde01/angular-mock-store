@@ -1,6 +1,6 @@
 echo "🔍 Running unit tests before push..."
 
-if npm test; then
+if npm run test:ci; then
   echo "✅ Unit tests passed. Proceeding with push."
   exit 0
 else
