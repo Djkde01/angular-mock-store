@@ -3,9 +3,21 @@
 >
   <app-card variant="form" size="md" customClasses="max-w-md w-full space-y-8">
     <header class="text-center">
-      <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-indigo-100">
-        <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      <div
+        class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-indigo-100"
+      >
+        <svg
+          class="h-6 w-6 text-indigo-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          ></path>
         </svg>
       </div>
       <h1 class="mt-6 text-3xl font-extrabold text-gray-900">
@@ -75,7 +87,7 @@
         [fullWidth]="true"
         (buttonClick)="onSubmit()"
       >
-        {{ loading ? "Iniciando sesión..." : "Iniciar sesión" }}
+        {{ loading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
       </app-button>
     </form>
   </app-card>

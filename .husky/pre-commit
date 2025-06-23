@@ -1,0 +1,18 @@
+echo "🖋 Running formatter..."
+if npm run format; then
+  echo " ✅ Formatting completed."
+else
+  echo "❌ Formatting failed."
+  exit 1
+fi
+
+echo "🔍 Running linter..."
+if npm run lint; then
+  echo "✅ Lint passed."
+else
+  echo "❌ Lint failed."
+  exit 1
+fi
+
+git update-index --again
+echo "🙌 All checks passed. Proceeding with commit."

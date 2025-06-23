@@ -1,12 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <nav class="bg-white rounded-lg shadow-lg border border-gray-200 p-4" role="navigation" aria-label="Pagination">
+    <nav
+      class="bg-white rounded-lg shadow-lg border border-gray-200 p-4"
+      role="navigation"
+      aria-label="Pagination"
+    >
       <div class="flex items-center justify-between">
         <!-- Items info -->
         <div class="text-sm text-gray-700">
@@ -24,8 +28,18 @@ import { CommonModule } from '@angular/common';
             [class]="getPreviousButtonClasses()"
             aria-label="Página anterior"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
             </svg>
           </button>
 
@@ -40,7 +54,12 @@ import { CommonModule } from '@angular/common';
           </button>
 
           <!-- Ellipsis -->
-          <span *ngIf="getPageNumbers()[0] > 2" class="px-2 py-2 text-gray-500" aria-hidden="true">...</span>
+          <span
+            *ngIf="getPageNumbers()[0] > 2"
+            class="px-2 py-2 text-gray-500"
+            aria-hidden="true"
+            >...</span
+          >
 
           <!-- Page Numbers -->
           <button
@@ -55,7 +74,9 @@ import { CommonModule } from '@angular/common';
 
           <!-- Ellipsis -->
           <span
-            *ngIf="getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1"
+            *ngIf="
+              getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1
+            "
             class="px-2 py-2 text-gray-500"
             aria-hidden="true"
           >
@@ -79,88 +100,107 @@ import { CommonModule } from '@angular/common';
             [class]="getNextButtonClasses()"
             aria-label="Página siguiente"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
             </svg>
           </button>
         </div>
       </div>
     </nav>
-  `
+  `,
 })
 export class PaginationComponent {
-  @Input() currentPage = 1;
-  @Input() totalPages = 1;
-  @Input() totalItems = 0;
-  @Input() itemsPerPage = 10;
-  @Input() maxVisiblePages = 5;
+  @Input() currentPage = 1
+  @Input() totalPages = 1
+  @Input() totalItems = 0
+  @Input() itemsPerPage = 10
+  @Input() maxVisiblePages = 5
 
-  @Output() pageChange = new EventEmitter<number>();
+  @Output() pageChange = new EventEmitter<number>()
 
   get startItem(): number {
-    return (this.currentPage - 1) * this.itemsPerPage + 1;
+    return (this.currentPage - 1) * this.itemsPerPage + 1
   }
 
   get endItem(): number {
-    return Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
+    return Math.min(this.currentPage * this.itemsPerPage, this.totalItems)
   }
 
   onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
-      this.pageChange.emit(page);
+      this.pageChange.emit(page)
     }
   }
 
   getPageNumbers(): number[] {
-    const pages = [];
+    const pages = []
 
-    let startPage = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
-    let endPage = Math.min(this.totalPages, startPage + this.maxVisiblePages - 1);
+    let startPage = Math.max(
+      1,
+      this.currentPage - Math.floor(this.maxVisiblePages / 2)
+    )
+    const endPage = Math.min(
+      this.totalPages,
+      startPage + this.maxVisiblePages - 1
+    )
 
     if (endPage - startPage + 1 < this.maxVisiblePages) {
-      startPage = Math.max(1, endPage - this.maxVisiblePages + 1);
+      startPage = Math.max(1, endPage - this.maxVisiblePages + 1)
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+      pages.push(i)
     }
 
-    return pages;
+    return pages
   }
 
   canGoPrevious(): boolean {
-    return this.currentPage > 1;
+    return this.currentPage > 1
   }
 
   canGoNext(): boolean {
-    return this.currentPage < this.totalPages;
+    return this.currentPage < this.totalPages
   }
 
   getPreviousButtonClasses(): string {
-    const baseClasses = 'px-3 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg transition-colors duration-200';
+    const baseClasses =
+      'px-3 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg transition-colors duration-200'
     const disabledClasses = !this.canGoPrevious()
       ? 'text-gray-300 cursor-not-allowed opacity-50'
-      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700';
+      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
 
-    return `${baseClasses} ${disabledClasses}`;
+    return `${baseClasses} ${disabledClasses}`
   }
 
   getNextButtonClasses(): string {
-    const baseClasses = 'px-3 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg transition-colors duration-200';
+    const baseClasses =
+      'px-3 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg transition-colors duration-200'
     const disabledClasses = !this.canGoNext()
       ? 'text-gray-300 cursor-not-allowed opacity-50'
-      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700';
+      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
 
-    return `${baseClasses} ${disabledClasses}`;
+    return `${baseClasses} ${disabledClasses}`
   }
 
   getPageButtonClasses(page: number): string {
-    const baseClasses = 'px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200';
+    const baseClasses =
+      'px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200'
 
     if (page === this.currentPage) {
-      return `${baseClasses} bg-indigo-600 text-white`;
+      return `${baseClasses} bg-indigo-600 text-white`
     } else {
-      return `${baseClasses} text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700`;
+      return `${baseClasses} text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700`
     }
   }
 }
