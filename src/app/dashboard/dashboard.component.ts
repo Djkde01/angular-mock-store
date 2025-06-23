@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil, combineLatest } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 import { ProductService } from '../services/product.service';
 import { User } from '../auth/models/user.model';
@@ -11,7 +11,6 @@ import {
   PaginationComponent,
   RatingComponent,
   UserInfo,
-  NavItem,
   NavigationComponent,
   LoadingSpinnerComponent,
   AlertComponent,
@@ -32,15 +31,12 @@ import {
     LoadingSpinnerComponent,
     AlertComponent,
     CardComponent,
-    ButtonComponent
+    ButtonComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  // Make Math available in template
-  Math = Math;
-
   currentUser: User | null = null;
   products: Product[] = [];
   filteredProducts: Product[] = [];
@@ -62,11 +58,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private authService: AuthService,
-    private productService: ProductService,
-    private router: Router
-  ) {}
+  private authService = inject(AuthService);
+  private productService = inject(ProductService);
+  private router = inject(Router);
+  constructor() {
+    // Initialize component properties if needed
+    this.filteredProducts = [];
+    this.paginatedProducts = [];
+  }
 
   ngOnInit(): void {
     this.authService.currentUser$
@@ -91,7 +90,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
 
-    this.productService.getProducts()
+    this.productService
+      .getProducts()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (products) => {
@@ -103,12 +103,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.error = 'Failed to load products';
           this.loading = false;
           console.error('Error loading products:', error);
-        }
+        },
       });
   }
 
   loadCategories(): void {
-    this.productService.getCategories()
+    this.productService
+      .getCategories()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
@@ -116,7 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error loading categories:', error);
-        }
+        },
       });
   }
 
@@ -127,7 +128,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     // Filter products
-    this.filteredProducts = this.productService.filterProducts(this.products, filters);
+    this.filteredProducts = this.productService.filterProducts(
+      this.products,
+      filters
+    );
 
     // Apply sorting
     this.applySorting();
@@ -230,8 +234,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const pages = [];
     const maxVisiblePages = 5;
 
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+    let startPage = Math.max(
+      1,
+      this.currentPage - Math.floor(maxVisiblePages / 2)
+    );
+    const endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -259,7 +266,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   formatPrice(price: number): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(price);
   }
 
@@ -275,8 +282,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getUserInfo(): UserInfo | undefined {
     if (!this.currentUser) return undefined;
     return {
-      name: this.currentUser.firstName || this.currentUser.username || 'Usuario',
-      email: this.currentUser.email
+      name:
+        this.currentUser.firstName || this.currentUser.username || 'Usuario',
+      email: this.currentUser.email,
     };
   }
 }
