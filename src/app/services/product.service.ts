@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -6,17 +6,25 @@ import { Product } from '../models/product.model';
 import { AuthService } from '../auth/services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private readonly apiUrl = 'https://fakestoreapi.com/products';
-  private productsSubject = new BehaviorSubject<Product[]>([]);
-  public products$ = this.productsSubject.asObservable();
+  private productsSubject;
+  private loadingSubject: BehaviorSubject<boolean>;
+  public loading$: Observable<boolean>;
 
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading$ = this.loadingSubject.asObservable();
+  public products$: Observable<Product[]>;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  private http: HttpClient = inject(HttpClient);
+  private authService: AuthService = inject(AuthService);
+
+  constructor() {
+    this.productsSubject = new BehaviorSubject<Product[]>([]);
+    this.products$ = this.productsSubject.asObservable();
+    this.loadingSubject = new BehaviorSubject<boolean>(false);
+    this.loading$ = this.loadingSubject.asObservable();
+  }
 
   /**
    * Get HTTP headers with authorization token if available
@@ -24,7 +32,7 @@ export class ProductService {
   private getHttpHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
 
     if (token) {
@@ -42,12 +50,12 @@ export class ProductService {
     const headers = this.getHttpHeaders();
 
     return this.http.get<Product[]>(this.apiUrl, { headers }).pipe(
-      map(products => {
+      map((products) => {
         this.productsSubject.next(products);
         this.loadingSubject.next(false);
         return products;
       }),
-      catchError(error => {
+      catchError((error) => {
         this.loadingSubject.next(false);
         console.error('Error fetching products:', error);
         return throwError(() => new Error('Failed to load products'));
@@ -62,7 +70,7 @@ export class ProductService {
     const headers = this.getHttpHeaders();
 
     return this.http.get<Product>(`${this.apiUrl}/${id}`, { headers }).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching product:', error);
         return throwError(() => new Error('Failed to load product'));
       })
@@ -75,12 +83,14 @@ export class ProductService {
   getCategories(): Observable<string[]> {
     const headers = this.getHttpHeaders();
 
-    return this.http.get<string[]>(`${this.apiUrl}/categories`, { headers }).pipe(
-      catchError(error => {
-        console.error('Error fetching categories:', error);
-        return throwError(() => new Error('Failed to load categories'));
-      })
-    );
+    return this.http
+      .get<string[]>(`${this.apiUrl}/categories`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching categories:', error);
+          return throwError(() => new Error('Failed to load categories'));
+        })
+      );
   }
 
   /**
@@ -90,27 +100,34 @@ export class ProductService {
     this.loadingSubject.next(true);
     const headers = this.getHttpHeaders();
 
-    return this.http.get<Product[]>(`${this.apiUrl}/category/${category}`, { headers }).pipe(
-      map(products => {
-        this.loadingSubject.next(false);
-        return products;
-      }),
-      catchError(error => {
-        this.loadingSubject.next(false);
-        console.error('Error fetching products by category:', error);
-        return throwError(() => new Error('Failed to load products by category'));
-      })
-    );
+    return this.http
+      .get<Product[]>(`${this.apiUrl}/category/${category}`, { headers })
+      .pipe(
+        map((products) => {
+          this.loadingSubject.next(false);
+          return products;
+        }),
+        catchError((error) => {
+          this.loadingSubject.next(false);
+          console.error('Error fetching products by category:', error);
+          return throwError(
+            () => new Error('Failed to load products by category')
+          );
+        })
+      );
   }
 
   /**
    * Filter products locally
    */
-  filterProducts(products: Product[], filters: {
-    category?: string;
-    search?: string;
-  }): Product[] {
-    return products.filter(product => {
+  filterProducts(
+    products: Product[],
+    filters: {
+      category?: string;
+      search?: string;
+    }
+  ): Product[] {
+    return products.filter((product) => {
       // Category filter
       if (filters.category && product.category !== filters.category) {
         return false;

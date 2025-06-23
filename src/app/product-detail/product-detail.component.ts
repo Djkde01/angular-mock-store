@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,7 +8,7 @@ import {
   NavigationComponent,
   LoadingSpinnerComponent,
   AlertComponent,
-  RatingComponent
+  RatingComponent,
 } from '../shared/components';
 
 @Component({
@@ -20,10 +20,10 @@ import {
     NavigationComponent,
     LoadingSpinnerComponent,
     AlertComponent,
-    RatingComponent
+    RatingComponent,
   ],
   templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.scss']
+  styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product | null = null;
@@ -31,21 +31,20 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   error: string | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private productService: ProductService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private productService = inject(ProductService);
+  constructor() {
+    // No additional initialization needed
+  }
 
   ngOnInit(): void {
-    this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const id = +params['id'];
-        if (id) {
-          this.loadProduct(id);
-        }
-      });
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = +params['id'];
+      if (id) {
+        this.loadProduct(id);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -57,7 +56,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
 
-    this.productService.getProduct(id)
+    this.productService
+      .getProduct(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (product) => {
@@ -68,7 +68,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           this.error = 'Failed to load product';
           this.loading = false;
           console.error('Error loading product:', error);
-        }
+        },
       });
   }
 
@@ -79,7 +79,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   formatPrice(price: number): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(price);
   }
 
