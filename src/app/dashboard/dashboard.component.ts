@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from '../auth/services/auth.service';
-import { ProductService } from '../services/product.service';
-import { User } from '../auth/models/user.model';
-import { Product } from '../models/product.model';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Router, RouterModule } from '@angular/router'
+import { FormsModule } from '@angular/forms'
+import { Subject, takeUntil } from 'rxjs'
+import { AuthService } from '../auth/services/auth.service'
+import { ProductService } from '../services/product.service'
+import { User } from '../auth/models/user.model'
+import { Product } from '../models/product.model'
 import {
   PaginationComponent,
   RatingComponent,
@@ -16,7 +16,7 @@ import {
   AlertComponent,
   CardComponent,
   ButtonComponent,
-} from '../shared/components';
+} from '../shared/components'
 
 @Component({
   selector: 'app-dashboard',
@@ -37,74 +37,74 @@ import {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  currentUser: User | null = null;
-  products: Product[] = [];
-  filteredProducts: Product[] = [];
-  paginatedProducts: Product[] = [];
-  categories: string[] = [];
-  loading = false;
-  error: string | null = null;
+  currentUser: User | null = null
+  products: Product[] = []
+  filteredProducts: Product[] = []
+  paginatedProducts: Product[] = []
+  categories: string[] = []
+  loading = false
+  error: string | null = null
 
   // Filter and sort properties
-  selectedCategory = '';
-  searchTerm = '';
-  sortBy: 'price-asc' | 'price-desc' | 'none' = 'none';
+  selectedCategory = ''
+  searchTerm = ''
+  sortBy: 'price-asc' | 'price-desc' | 'none' = 'none'
 
   // Pagination properties
-  currentPage = 1;
-  itemsPerPage = 8;
-  totalItems = 0;
-  totalPages = 0;
+  currentPage = 1
+  itemsPerPage = 8
+  totalItems = 0
+  totalPages = 0
 
-  private destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>()
 
-  private authService = inject(AuthService);
-  private productService = inject(ProductService);
-  private router = inject(Router);
+  private authService = inject(AuthService)
+  private productService = inject(ProductService)
+  private router = inject(Router)
   constructor() {
     // Initialize component properties if needed
-    this.filteredProducts = [];
-    this.paginatedProducts = [];
+    this.filteredProducts = []
+    this.paginatedProducts = []
   }
 
   ngOnInit(): void {
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
-        this.currentUser = user;
+        this.currentUser = user
         if (!user) {
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/auth/login'])
         }
-      });
+      })
 
-    this.loadProducts();
-    this.loadCategories();
+    this.loadProducts()
+    this.loadCategories()
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   loadProducts(): void {
-    this.loading = true;
-    this.error = null;
+    this.loading = true
+    this.error = null
 
     this.productService
       .getProducts()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (products) => {
-          this.products = products;
-          this.applyFilters();
-          this.loading = false;
+          this.products = products
+          this.applyFilters()
+          this.loading = false
         },
         error: (error) => {
-          this.error = 'Failed to load products';
-          this.loading = false;
-          console.error('Error loading products:', error);
+          this.error = 'Failed to load products'
+          this.loading = false
+          console.error('Error loading products:', error)
         },
-      });
+      })
   }
 
   loadCategories(): void {
@@ -113,178 +113,178 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
-          this.categories = categories;
+          this.categories = categories
         },
         error: (error) => {
-          console.error('Error loading categories:', error);
+          console.error('Error loading categories:', error)
         },
-      });
+      })
   }
 
   applyFilters(): void {
     const filters = {
       category: this.selectedCategory || undefined,
       search: this.searchTerm || undefined,
-    };
+    }
 
     // Filter products
     this.filteredProducts = this.productService.filterProducts(
       this.products,
       filters
-    );
+    )
 
     // Apply sorting
-    this.applySorting();
+    this.applySorting()
 
     // Reset to first page and update pagination
-    this.currentPage = 1;
-    this.updatePagination();
+    this.currentPage = 1
+    this.updatePagination()
   }
 
   applySorting(): void {
     switch (this.sortBy) {
       case 'price-asc':
-        this.filteredProducts.sort((a, b) => a.price - b.price);
-        break;
+        this.filteredProducts.sort((a, b) => a.price - b.price)
+        break
       case 'price-desc':
-        this.filteredProducts.sort((a, b) => b.price - a.price);
-        break;
+        this.filteredProducts.sort((a, b) => b.price - a.price)
+        break
       default:
-        break;
+        break
     }
   }
 
   updatePagination(): void {
-    this.totalItems = this.filteredProducts.length;
-    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+    this.totalItems = this.filteredProducts.length
+    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage)
 
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage
+    const endIndex = startIndex + this.itemsPerPage
 
-    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
+    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex)
   }
 
   onCategoryChange(): void {
-    this.applyFilters();
+    this.applyFilters()
   }
 
   onSearchChange(): void {
-    this.applyFilters();
+    this.applyFilters()
   }
 
   onPriceChange(): void {
-    this.applyFilters();
+    this.applyFilters()
   }
 
   setSortBy(): void {
     // Dinamically set sortBy none to asc, asc to desc, and desc to none
     if (this.sortBy === 'none') {
-      this.sortBy = 'price-asc';
+      this.sortBy = 'price-asc'
     } else if (this.sortBy === 'price-asc') {
-      this.sortBy = 'price-desc';
+      this.sortBy = 'price-desc'
     } else {
-      this.sortBy = 'none';
+      this.sortBy = 'none'
     }
-    this.onSortChange();
+    this.onSortChange()
   }
 
   getSortIcon(): string {
     switch (this.sortBy) {
       case 'price-asc':
-        return '⇈';
+        return '⇈'
       case 'price-desc':
-        return '⇊';
+        return '⇊'
       default:
-        return '⇅';
+        return '⇅'
     }
   }
 
   selectCategory(category: string): void {
-    this.selectedCategory = category;
-    this.onCategoryChange();
+    this.selectedCategory = category
+    this.onCategoryChange()
   }
 
   onSortChange(): void {
-    this.applyFilters();
-    this.currentPage = 1;
-    this.updatePagination();
+    this.applyFilters()
+    this.currentPage = 1
+    this.updatePagination()
   }
 
   onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.updatePagination();
+      this.currentPage = page
+      this.updatePagination()
       // Scroll to top of products section
-      const productsSection = document.getElementById('products-section');
+      const productsSection = document.getElementById('products-section')
       if (productsSection) {
-        productsSection.scrollIntoView({ behavior: 'smooth' });
+        productsSection.scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
 
   clearFilters(): void {
-    this.selectedCategory = '';
-    this.searchTerm = '';
-    this.sortBy = 'none';
-    this.applyFilters();
+    this.selectedCategory = ''
+    this.searchTerm = ''
+    this.sortBy = 'none'
+    this.applyFilters()
   }
 
   // Pagination helper methods
   getPageNumbers(): number[] {
-    const pages = [];
-    const maxVisiblePages = 5;
+    const pages = []
+    const maxVisiblePages = 5
 
     let startPage = Math.max(
       1,
       this.currentPage - Math.floor(maxVisiblePages / 2)
-    );
-    const endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+    )
+    const endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1)
 
     if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+      pages.push(i)
     }
 
-    return pages;
+    return pages
   }
 
   canGoPrevious(): boolean {
-    return this.currentPage > 1;
+    return this.currentPage > 1
   }
 
   canGoNext(): boolean {
-    return this.currentPage < this.totalPages;
+    return this.currentPage < this.totalPages
   }
 
   viewProduct(productId: number): void {
-    this.router.navigate(['/product', productId]);
+    this.router.navigate(['/product', productId])
   }
 
   formatPrice(price: number): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-    }).format(price);
+    }).format(price)
   }
 
   trackByProductId(index: number, product: Product): number {
-    return product.id;
+    return product.id
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.authService.logout()
+    this.router.navigate(['/auth/login'])
   }
 
   getUserInfo(): UserInfo | undefined {
-    if (!this.currentUser) return undefined;
+    if (!this.currentUser) return undefined
     return {
       name:
         this.currentUser.firstName || this.currentUser.username || 'Usuario',
       email: this.currentUser.email,
-    };
+    }
   }
 }

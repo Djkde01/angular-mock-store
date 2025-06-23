@@ -1,12 +1,12 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 export interface RadioOption {
-  value: number | string;
-  label: string;
-  icon?: string;
-  disabled?: boolean;
+  value: number | string
+  label: string
+  icon?: string
+  disabled?: boolean
 }
 
 @Component({
@@ -82,74 +82,74 @@ export interface RadioOption {
   `,
 })
 export class RadioGroupComponent implements ControlValueAccessor {
-  @Input() id = '';
-  @Input() label = '';
-  @Input() name = '';
-  @Input() disabled = false;
-  @Input() required = false;
-  @Input() errorMessage = '';
-  @Input() helperText = '';
-  @Input() showError = false;
-  @Input() options: RadioOption[] = [];
-  @Input() layout: 'horizontal' | 'vertical' | 'grid' = 'grid';
-  @Input() columns = 2;
+  @Input() id = ''
+  @Input() label = ''
+  @Input() name = ''
+  @Input() disabled = false
+  @Input() required = false
+  @Input() errorMessage = ''
+  @Input() helperText = ''
+  @Input() showError = false
+  @Input() options: RadioOption[] = []
+  @Input() layout: 'horizontal' | 'vertical' | 'grid' = 'grid'
+  @Input() columns = 2
 
-  value: number | string | null = null;
+  value: number | string | null = null
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange = (value: number | string | null) => {
     // No-op by default
-  };
+  }
   private onTouched = () => {
     // No-op by default
-  };
+  }
 
   writeValue(value: number | string | null): void {
-    this.value = value;
+    this.value = value
   }
 
   registerOnChange(fn: (value: number | string | null) => void): void {
-    this.onChange = fn;
+    this.onChange = fn
   }
 
   registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+    this.onTouched = fn
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.disabled = isDisabled
   }
 
   onSelectionChange(value: number | string): void {
-    this.value = value;
-    this.onChange(value);
+    this.value = value
+    this.onChange(value)
   }
 
   isSelected(optionValue: number | string): boolean {
-    return this.value === optionValue;
+    return this.value === optionValue
   }
 
   trackByValue(index: number, option: RadioOption): number | string {
-    return option.value;
+    return option.value
   }
 
   getContainerClasses(): string {
     switch (this.layout) {
       case 'horizontal':
-        return 'flex flex-wrap gap-3';
+        return 'flex flex-wrap gap-3'
       case 'vertical':
-        return 'space-y-3';
+        return 'space-y-3'
       case 'grid':
       default:
-        return `grid grid-cols-1 gap-3 sm:grid-cols-${this.columns}`;
+        return `grid grid-cols-1 gap-3 sm:grid-cols-${this.columns}`
     }
   }
 
   getOptionClasses(): string {
-    return 'flex items-center justify-center p-4 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all duration-200 peer-checked:border-purple-500 peer-checked:bg-purple-50 peer-checked:shadow-lg peer-checked:ring-2 peer-checked:ring-purple-200 peer-focus:ring-2 peer-focus:ring-purple-300 peer-focus:ring-offset-2';
+    return 'flex items-center justify-center p-4 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all duration-200 peer-checked:border-purple-500 peer-checked:bg-purple-50 peer-checked:shadow-lg peer-checked:ring-2 peer-checked:ring-purple-200 peer-focus:ring-2 peer-focus:ring-purple-300 peer-focus:ring-offset-2'
   }
 
   getLabelClasses(): string {
-    return 'text-sm font-medium text-gray-700 peer-checked:text-purple-700 select-none';
+    return 'text-sm font-medium text-gray-700 peer-checked:text-purple-700 select-none'
   }
 }

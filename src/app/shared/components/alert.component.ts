@@ -1,8 +1,14 @@
-import { Component, Input, Output, EventEmitter, AfterContentInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  AfterContentInit,
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-export type AlertType = 'success' | 'error' | 'warning' | 'info';
-export type AlertSize = 'sm' | 'md' | 'lg';
+export type AlertType = 'success' | 'error' | 'warning' | 'info'
+export type AlertSize = 'sm' | 'md' | 'lg'
 
 @Component({
   selector: 'app-alert',
@@ -82,45 +88,45 @@ export type AlertSize = 'sm' | 'md' | 'lg';
   `,
 })
 export class AlertComponent implements AfterContentInit {
-  @Input() type: AlertType = 'info';
-  @Input() size: AlertSize = 'md';
-  @Input() title = '';
-  @Input() message = '';
-  @Input() dismissible = false;
-  @Input() customClasses = '';
+  @Input() type: AlertType = 'info'
+  @Input() size: AlertSize = 'md'
+  @Input() title = ''
+  @Input() message = ''
+  @Input() dismissible = false
+  @Input() customClasses = ''
 
-  @Output() dismiss = new EventEmitter<void>();
+  @Output() dismiss = new EventEmitter<void>()
 
-  hasContent = false;
+  hasContent = false
 
   ngAfterContentInit() {
     // Check if there's projected content
-    this.hasContent = true; // This would be properly implemented with content projection detection
+    this.hasContent = true // This would be properly implemented with content projection detection
   }
 
   onDismiss(): void {
-    this.dismiss.emit();
+    this.dismiss.emit()
   }
 
   getAlertClasses(): string {
-    const baseClasses = 'rounded-lg border transition-all duration-200';
+    const baseClasses = 'rounded-lg border transition-all duration-200'
 
     const typeClasses = {
       success: 'bg-green-50 border-green-200 text-green-800',
       error: 'bg-red-50 border-red-200 text-red-800',
       warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
       info: 'bg-blue-50 border-blue-200 text-blue-800',
-    };
+    }
 
     const sizeClasses = {
       sm: 'p-3',
       md: 'p-4',
       lg: 'p-6',
-    };
+    }
 
     return `${baseClasses} ${typeClasses[this.type]} ${
       sizeClasses[this.size]
-    } ${this.customClasses}`.trim();
+    } ${this.customClasses}`.trim()
   }
 
   getIconClasses(): string {
@@ -128,9 +134,9 @@ export class AlertComponent implements AfterContentInit {
       sm: 'h-4 w-4',
       md: 'h-5 w-5',
       lg: 'h-6 w-6',
-    };
+    }
 
-    return sizeClasses[this.size];
+    return sizeClasses[this.size]
   }
 
   getTitleClasses(): string {
@@ -138,9 +144,9 @@ export class AlertComponent implements AfterContentInit {
       sm: 'text-sm font-medium',
       md: 'text-base font-medium',
       lg: 'text-lg font-semibold',
-    };
+    }
 
-    return sizeClasses[this.size];
+    return sizeClasses[this.size]
   }
 
   getMessageClasses(): string {
@@ -148,24 +154,24 @@ export class AlertComponent implements AfterContentInit {
       sm: 'text-xs',
       md: 'text-sm',
       lg: 'text-base',
-    };
+    }
 
-    const marginClasses = this.title ? 'mt-1' : '';
+    const marginClasses = this.title ? 'mt-1' : ''
 
-    return `${sizeClasses[this.size]} ${marginClasses}`;
+    return `${sizeClasses[this.size]} ${marginClasses}`
   }
 
   getCloseButtonClasses(): string {
     const baseClasses =
-      'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200';
+      'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200'
 
     const typeClasses = {
       success: 'text-green-500 hover:bg-green-100 focus:ring-green-600',
       error: 'text-red-500 hover:bg-red-100 focus:ring-red-600',
       warning: 'text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-600',
       info: 'text-blue-500 hover:bg-blue-100 focus:ring-blue-600',
-    };
+    }
 
-    return `${baseClasses} ${typeClasses[this.type]}`;
+    return `${baseClasses} ${typeClasses[this.type]}`
   }
 }

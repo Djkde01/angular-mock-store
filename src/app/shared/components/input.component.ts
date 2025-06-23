@@ -1,6 +1,6 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 export type InputType =
   | 'text'
@@ -8,7 +8,7 @@ export type InputType =
   | 'password'
   | 'date'
   | 'number'
-  | 'tel';
+  | 'tel'
 
 @Component({
   selector: 'app-input',
@@ -85,70 +85,70 @@ export type InputType =
   `,
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() id = '';
-  @Input() name = '';
-  @Input() label = '';
-  @Input() type: InputType = 'text';
-  @Input() placeholder = '';
-  @Input() disabled = false;
-  @Input() readonly = false;
-  @Input() required = false;
-  @Input() errorMessage = '';
-  @Input() helperText = '';
-  @Input() iconLeft?: string;
-  @Input() iconRight?: string;
-  @Input() showError = false;
+  @Input() id = ''
+  @Input() name = ''
+  @Input() label = ''
+  @Input() type: InputType = 'text'
+  @Input() placeholder = ''
+  @Input() disabled = false
+  @Input() readonly = false
+  @Input() required = false
+  @Input() errorMessage = ''
+  @Input() helperText = ''
+  @Input() iconLeft?: string
+  @Input() iconRight?: string
+  @Input() showError = false
 
-  value = '';
+  value = ''
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange = (value: string) => {
     // No-op by default
-  };
+  }
   private onTouched = () => {
     // No-op by default
-  };
+  }
 
   writeValue(value: string): void {
-    this.value = value || '';
+    this.value = value || ''
   }
 
   registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
+    this.onChange = fn
   }
 
   registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+    this.onTouched = fn
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.disabled = isDisabled
   }
 
   onInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.value = target.value;
-    this.onChange(this.value);
+    const target = event.target as HTMLInputElement
+    this.value = target.value
+    this.onChange(this.value)
   }
 
   onBlur(): void {
-    this.onTouched();
+    this.onTouched()
   }
 
   getInputClasses(): string {
     const baseClasses =
-      'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-gray-400';
+      'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-gray-400'
 
-    const iconLeftClass = this.iconLeft ? 'pl-10' : '';
-    const iconRightClass = this.iconRight ? 'pr-10' : '';
+    const iconLeftClass = this.iconLeft ? 'pl-10' : ''
+    const iconRightClass = this.iconRight ? 'pr-10' : ''
 
     const errorClasses =
       this.errorMessage && this.showError
         ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500';
+        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
 
-    const disabledClass = this.disabled ? 'bg-gray-50 cursor-not-allowed' : '';
+    const disabledClass = this.disabled ? 'bg-gray-50 cursor-not-allowed' : ''
 
-    return `${baseClasses} ${iconLeftClass} ${iconRightClass} ${errorClasses} ${disabledClass}`.trim();
+    return `${baseClasses} ${iconLeftClass} ${iconRightClass} ${errorClasses} ${disabledClass}`.trim()
   }
 }

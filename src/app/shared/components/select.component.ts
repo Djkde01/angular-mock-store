@@ -1,16 +1,16 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 export interface SelectOption {
-  value: string | number;
-  label: string;
-  disabled?: boolean;
+  value: string | number
+  label: string
+  disabled?: boolean
 }
 
 export interface SelectOptionGroup {
-  label: string;
-  options: SelectOption[];
+  label: string
+  options: SelectOption[]
 }
 
 @Component({
@@ -91,60 +91,58 @@ export interface SelectOptionGroup {
   `,
 })
 export class SelectComponent implements ControlValueAccessor {
-  @Input() id = '';
-  @Input() name = '';
-  @Input() label = '';
-  @Input() placeholder = '';
-  @Input() disabled = false;
-  @Input() required = false;
-  @Input() errorMessage = '';
-  @Input() helperText = '';
-  @Input() showError = false;
-  @Input() options: SelectOption[] = [];
-  @Input() optionGroups: SelectOptionGroup[] = [];
+  @Input() id = ''
+  @Input() name = ''
+  @Input() label = ''
+  @Input() placeholder = ''
+  @Input() disabled = false
+  @Input() required = false
+  @Input() errorMessage = ''
+  @Input() helperText = ''
+  @Input() showError = false
+  @Input() options: SelectOption[] = []
+  @Input() optionGroups: SelectOptionGroup[] = []
 
-  value: string | number | null = null;
+  value: string | number | null = null
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChange = (value: string | number | null) => {
     // No-op by default
-  };
+  }
   onTouched = () => {
     // No-op by default
-  };
+  }
 
   writeValue(value: string | number | null): void {
-    this.value = value || '';
+    this.value = value || ''
   }
 
   registerOnChange(fn: (value: string | number | null) => void): void {
-    this.onChange = fn;
+    this.onChange = fn
   }
 
   registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+    this.onTouched = fn
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.disabled = isDisabled
   }
 
   onSelectionChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.value = target.value;
-    this.onChange(this.value);
+    const target = event.target as HTMLSelectElement
+    this.value = target.value
+    this.onChange(this.value)
   }
 
   getSelectClasses(): string {
     const baseClasses =
-      'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400';
+      'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400'
     const errorClasses = this.showError
       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-      : 'border-gray-300';
-    const disabledClasses = this.disabled
-      ? 'bg-gray-50 cursor-not-allowed'
-      : '';
+      : 'border-gray-300'
+    const disabledClasses = this.disabled ? 'bg-gray-50 cursor-not-allowed' : ''
 
-    return `${baseClasses} ${errorClasses} ${disabledClasses}`.trim();
+    return `${baseClasses} ${errorClasses} ${disabledClasses}`.trim()
   }
 }

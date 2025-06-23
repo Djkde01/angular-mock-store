@@ -1,7 +1,7 @@
-import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { noAuthGuard } from './guards/auth.guard';
+import { Routes } from '@angular/router'
+import { LoginComponent } from './components/login/login.component'
+import { RegisterComponent } from './components/register/register.component'
+import { noAuthGuard } from './guards/auth.guard'
 
 export const authRoutes: Routes = [
   {
@@ -19,4 +19,4 @@ export const authRoutes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-];
+]

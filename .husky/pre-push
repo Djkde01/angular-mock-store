@@ -1,0 +1,9 @@
+echo "🔍 Running unit tests before push..."
+
+if npm test; then
+  echo "✅ Unit tests passed. Proceeding with push."
+  exit 0
+else
+  echo "❌ Unit tests failed. Push aborted."
+  exit 1
+fi

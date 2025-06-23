@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-export type RatingSize = 'sm' | 'md' | 'lg';
+export type RatingSize = 'sm' | 'md' | 'lg'
 
 @Component({
   selector: 'app-rating',
@@ -77,7 +77,7 @@ export type RatingSize = 'sm' | 'md' | 'lg';
 
       <!-- Rating text -->
       <span *ngIf="showRatingText" [class]="getRatingTextClasses()">
-        {{ rating | number : '1.1-1' }}
+        {{ rating | number: '1.1-1' }}
       </span>
 
       <!-- Count text -->
@@ -91,80 +91,80 @@ export type RatingSize = 'sm' | 'md' | 'lg';
   `,
 })
 export class RatingComponent implements OnInit {
-  @Input() rating = 0;
-  @Input() maxRating = 5;
-  @Input() size: RatingSize = 'md';
-  @Input() readonly = true;
-  @Input() allowHalf = true;
-  @Input() showRatingText = false;
-  @Input() showCount = false;
-  @Input() count?: number;
-  @Input() customClasses = '';
+  @Input() rating = 0
+  @Input() maxRating = 5
+  @Input() size: RatingSize = 'md'
+  @Input() readonly = true
+  @Input() allowHalf = true
+  @Input() showRatingText = false
+  @Input() showCount = false
+  @Input() count?: number
+  @Input() customClasses = ''
 
-  @Output() ratingChange = new EventEmitter<number>();
+  @Output() ratingChange = new EventEmitter<number>()
 
-  hoveredRating = 0;
-  stars: number[] = [];
+  hoveredRating = 0
+  stars: number[] = []
 
   ngOnInit() {
     this.stars = Array(this.maxRating)
       .fill(0)
-      .map((_, i) => i + 1);
+      .map((_, i) => i + 1)
   }
 
   onStarClick(value: number): void {
     if (!this.readonly) {
-      this.rating = value;
-      this.ratingChange.emit(value);
+      this.rating = value
+      this.ratingChange.emit(value)
     }
   }
 
   onStarHover(value: number): void {
     if (!this.readonly) {
-      this.hoveredRating = value;
+      this.hoveredRating = value
     }
   }
 
   onMouseLeave(): void {
     if (!this.readonly) {
-      this.hoveredRating = 0;
+      this.hoveredRating = 0
     }
   }
 
   getStarType(position: number): 'full' | 'half' | 'empty' {
-    const currentRating = this.hoveredRating || this.rating;
+    const currentRating = this.hoveredRating || this.rating
 
     if (currentRating >= position) {
-      return 'full';
+      return 'full'
     } else if (this.allowHalf && currentRating >= position - 0.5) {
-      return 'half';
+      return 'half'
     } else {
-      return 'empty';
+      return 'empty'
     }
   }
 
   getStarClasses(position: number): string {
-    const baseClasses = 'focus:outline-none transition-colors duration-200';
+    const baseClasses = 'focus:outline-none transition-colors duration-200'
     const interactiveClasses = this.readonly
       ? ''
-      : 'hover:scale-110 focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50';
+      : 'hover:scale-110 focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50'
 
-    const starType = this.getStarType(position);
+    const starType = this.getStarType(position)
 
-    let colorClasses = '';
+    let colorClasses = ''
     if (starType === 'full') {
-      colorClasses = 'text-yellow-400';
+      colorClasses = 'text-yellow-400'
     } else if (starType === 'half') {
-      colorClasses = 'text-yellow-400';
+      colorClasses = 'text-yellow-400'
     } else {
       colorClasses = this.readonly
         ? 'text-gray-300'
-        : 'text-gray-300 hover:text-yellow-400';
+        : 'text-gray-300 hover:text-yellow-400'
     }
 
-    const disabledClasses = this.readonly ? 'cursor-default' : 'cursor-pointer';
+    const disabledClasses = this.readonly ? 'cursor-default' : 'cursor-pointer'
 
-    return `${baseClasses} ${interactiveClasses} ${colorClasses} ${disabledClasses} ${this.customClasses}`.trim();
+    return `${baseClasses} ${interactiveClasses} ${colorClasses} ${disabledClasses} ${this.customClasses}`.trim()
   }
 
   getStarSizeClasses(): string {
@@ -172,9 +172,9 @@ export class RatingComponent implements OnInit {
       sm: 'w-4 h-4',
       md: 'w-5 h-5',
       lg: 'w-6 h-6',
-    };
+    }
 
-    return sizeClasses[this.size];
+    return sizeClasses[this.size]
   }
 
   getRatingTextClasses(): string {
@@ -182,9 +182,9 @@ export class RatingComponent implements OnInit {
       sm: 'text-sm',
       md: 'text-sm',
       lg: 'text-base',
-    };
+    }
 
-    return `font-medium text-gray-900 ${sizeClasses[this.size]}`;
+    return `font-medium text-gray-900 ${sizeClasses[this.size]}`
   }
 
   getCountTextClasses(): string {
@@ -192,8 +192,8 @@ export class RatingComponent implements OnInit {
       sm: 'text-xs',
       md: 'text-sm',
       lg: 'text-sm',
-    };
+    }
 
-    return `text-gray-500 ${sizeClasses[this.size]}`;
+    return `text-gray-500 ${sizeClasses[this.size]}`
   }
 }
