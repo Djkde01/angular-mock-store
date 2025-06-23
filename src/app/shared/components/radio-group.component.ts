@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface RadioOption {
-  value: any;
+  value: number | string;
   label: string;
   icon?: string;
   disabled?: boolean;
@@ -17,12 +17,16 @@ export interface RadioOption {
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RadioGroupComponent),
-      multi: true
-    }
+      multi: true,
+    },
   ],
   template: `
     <div class="space-y-3 mb-2">
-      <label *ngIf="label" class="block text-sm font-medium text-gray-700 legend">
+      <label
+        [for]="id"
+        *ngIf="label"
+        class="block text-sm font-medium text-gray-700 legend"
+      >
         {{ label }}
         <span *ngIf="required" class="text-red-500 ml-1">*</span>
       </label>
@@ -41,7 +45,6 @@ export interface RadioOption {
             [checked]="value === option.value"
             [disabled]="disabled || option.disabled"
             (change)="onSelectionChange(option.value)"
-            (blur)="onTouched()"
             class="sr-only peer"
           />
           <div [class]="getOptionClasses()">
@@ -61,7 +64,11 @@ export interface RadioOption {
       <div *ngIf="errorMessage && showError" class="mt-2">
         <p class="text-sm text-red-600 flex items-center">
           <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clip-rule="evenodd"
+            ></path>
           </svg>
           {{ errorMessage }}
         </p>
@@ -72,9 +79,10 @@ export interface RadioOption {
         <p class="text-sm text-gray-500">{{ helperText }}</p>
       </div>
     </div>
-  `
+  `,
 })
 export class RadioGroupComponent implements ControlValueAccessor {
+  @Input() id = '';
   @Input() label = '';
   @Input() name = '';
   @Input() disabled = false;
@@ -86,16 +94,21 @@ export class RadioGroupComponent implements ControlValueAccessor {
   @Input() layout: 'horizontal' | 'vertical' | 'grid' = 'grid';
   @Input() columns = 2;
 
-  value: any = null;
+  value: number | string | null = null;
 
-  private onChange = (value: any) => {};
-  public onTouched = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private onChange = (value: number | string | null) => {
+    // No-op by default
+  };
+  private onTouched = () => {
+    // No-op by default
+  };
 
-  writeValue(value: any): void {
+  writeValue(value: number | string | null): void {
     this.value = value;
   }
 
-  registerOnChange(fn: (value: any) => void): void {
+  registerOnChange(fn: (value: number | string | null) => void): void {
     this.onChange = fn;
   }
 
@@ -107,16 +120,16 @@ export class RadioGroupComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onSelectionChange(value: any): void {
+  onSelectionChange(value: number | string): void {
     this.value = value;
     this.onChange(value);
   }
 
-  isSelected(optionValue: any): boolean {
+  isSelected(optionValue: number | string): boolean {
     return this.value === optionValue;
   }
 
-  trackByValue(index: number, option: RadioOption): any {
+  trackByValue(index: number, option: RadioOption): number | string {
     return option.value;
   }
 

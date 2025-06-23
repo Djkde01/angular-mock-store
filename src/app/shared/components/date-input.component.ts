@@ -10,8 +10,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DateInputComponent),
-      multi: true
-    }
+      multi: true,
+    },
   ],
   template: `
     <div class="relative mb-2">
@@ -35,14 +35,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         [class]="getInputClasses()"
         (input)="onInput($event)"
         (focus)="onFocus()"
-        (blur)="onTouched()"
       />
 
       <!-- Error Message -->
       <div *ngIf="errorMessage && showError" class="mt-2">
         <p class="text-sm text-red-600 flex items-center">
           <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clip-rule="evenodd"
+            ></path>
           </svg>
           {{ errorMessage }}
         </p>
@@ -53,7 +56,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         <p class="text-sm text-gray-500">{{ helperText }}</p>
       </div>
     </div>
-  `
+  `,
 })
 export class DateInputComponent implements ControlValueAccessor {
   @Input() id = '';
@@ -69,8 +72,13 @@ export class DateInputComponent implements ControlValueAccessor {
 
   value = '';
 
-  private onChange = (value: string) => {};
-  public onTouched = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private onChange = (value: string) => {
+    // No-op by default
+  };
+  public onTouched = () => {
+    // No-op by default
+  };
 
   writeValue(value: string): void {
     this.value = value || '';
@@ -99,7 +107,8 @@ export class DateInputComponent implements ControlValueAccessor {
   }
 
   getInputClasses(): string {
-    const baseClasses = 'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400';
+    const baseClasses =
+      'appearance-none relative block w-full px-4 py-3 border placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all duration-200 hover:border-gray-400';
     const errorClasses = this.showError
       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
       : 'border-gray-300';
